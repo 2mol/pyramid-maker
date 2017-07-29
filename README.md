@@ -11,7 +11,7 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 - [ ] draw/**label** corners, highlight tip in red.
 - [ ] add **input** boxes for parameters.
 - [ ] **calculate angles**.
-- [ ] **generalize** pyramid base shape, re-work types.
+- [x] **generalize** pyramid base shape, re-work types.
 - [ ] **randomization** button.
 - [ ] properly **scale** visualization to fill svg canvas.
 - [ ] **annotate** visualization with angles and lengths. Toggle button.
