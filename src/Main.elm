@@ -1,6 +1,6 @@
 module Main exposing (main)
 
-{-| The entry-point for the pyramid builder.
+{-| go away, read your own source code.
 @docs main
 -}
 
@@ -10,7 +10,7 @@ import Svg.Attributes exposing (..)
 import Types exposing (..)
 
 
-{-| Start the program running.
+{-| I refuse to comment.
 -}
 main : Program Never Model Msg
 main =
@@ -28,11 +28,13 @@ type alias Model =
 startPyramid : Pyramid
 startPyramid =
     Pyramid
-        (Point 5 5 5)
-        (Point 10 50 0)
-        (Point 50 10 0)
-        (Point 90 50 0)
-        (Point 50 20 10)
+        [ Point 5 5
+        , Point 10 50
+        , Point 90 50
+        , Point 50 10
+        ]
+        (Point 50 20)
+        1
 
 
 model : Model
@@ -54,19 +56,16 @@ update msg model =
 drawLine : Line -> Svg msg
 drawLine { start, end } =
     let
-        lx1 =
-            toString start.x
+        lineCoord =
+            List.map toString [ start.x, end.x, start.y, end.y ]
 
-        ly1 =
-            toString start.y
+        svgLineCoord =
+            List.map2 (<|) [ x1, x2, y1, y2 ] lineCoord
 
-        lx2 =
-            toString end.x
-
-        ly2 =
-            toString end.y
+        lineParameters =
+            [ stroke "black", strokeWidth "0.2" ]
     in
-        line [ x1 lx1, y1 ly1, x2 lx2, y2 ly2, stroke "#000000", strokeWidth "0.2", scale "22" ] []
+        line (svgLineCoord ++ lineParameters) []
 
 
 drawLines : List Line -> List (Svg msg)
@@ -75,27 +74,46 @@ drawLines l =
 
 
 pyramidLines : Pyramid -> List Line
-pyramidLines { p1, p2, p3, p4, top } =
-    [ (Line p1 p2)
-    , (Line p2 p4)
-    , (Line p4 p3)
-    , (Line p3 p1)
-    , (Line p1 top)
-    , (Line p2 top)
-    , (Line p3 top)
-    , (Line p4 top)
-    ]
+pyramidLines { basePolygon, top } =
+    let
+        ridges =
+            List.map (Line top) basePolygon
+
+        perimeter =
+            polygonLinesCheating basePolygon
+    in
+        ridges ++ perimeter
+
+
+polygonLines : List Point -> List Line
+polygonLines p =
+    case p of
+        x1 :: x2 :: xs ->
+            Line x1 x2 :: polygonLines (x2 :: xs)
+
+        other ->
+            []
+
+
+polygonLinesCheating : List Point -> List Line
+polygonLinesCheating p =
+    case p of
+        [] ->
+            []
+
+        x :: xs ->
+            polygonLines (x :: xs ++ [ x ])
 
 
 view : Model -> Html Msg
 view model =
     div []
-        [ svg [ viewBox "0 0 100 100", width "300px" ] []
-        , svg [ viewBox "0 0 100 100", width "300px" ]
+        [ svg [ viewBox "0 0 160 100", width "300px" ] []
+        , svg [ viewBox "0 0 160 100", width "300px", shapeRendering "auto" ]
             (drawLines (pyramidLines model))
         , br [] []
-        , svg [ viewBox "0 0 100 100", width "300px" ]
+        , svg [ viewBox "0 0 160 100", width "300px" ]
             (drawLines (pyramidLines model))
-        , svg [ viewBox "0 0 100 100", width "300px" ]
+        , svg [ viewBox "0 0 160 100", width "300px" ]
             (drawLines (pyramidLines model))
         ]
