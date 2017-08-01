@@ -5,9 +5,11 @@ module Main exposing (main)
 -}
 
 import Html exposing (..)
-import Svg exposing (..)
-import Svg.Attributes exposing (..)
+import Svg as Svg
+import Svg.Attributes as SvgA
 import Types exposing (..)
+import Utils exposing (..)
+import Drawing as D
 
 
 {-| I refuse to comment.
@@ -15,7 +17,7 @@ import Types exposing (..)
 main : Program Never Model Msg
 main =
     Html.beginnerProgram
-        { model = model
+        { model = initialModel
         , view = view
         , update = update
         }
@@ -32,13 +34,14 @@ startPyramid =
         , Point 10 50
         , Point 90 50
         , Point 50 10
+        , Point 30 5
         ]
         (Point 50 20)
         1
 
 
-model : Model
-model =
+initialModel : Model
+initialModel =
     startPyramid
 
 
@@ -53,67 +56,63 @@ update msg model =
             startPyramid
 
 
-drawLine : Line -> Svg msg
-drawLine { start, end } =
-    let
-        lineCoord =
-            List.map toString [ start.x, end.x, start.y, end.y ]
-
-        svgLineCoord =
-            List.map2 (<|) [ x1, x2, y1, y2 ] lineCoord
-
-        lineParameters =
-            [ stroke "black", strokeWidth "0.2" ]
-    in
-        line (svgLineCoord ++ lineParameters) []
+canvasSize : { x : Float, y : Float }
+canvasSize =
+    { x = 160, y = 100 }
 
 
-drawLines : List Line -> List (Svg msg)
-drawLines l =
-    List.map drawLine l
+canvas : String
+canvas =
+    [ 0, 0, canvasSize.x, canvasSize.y ]
+        |> List.map toString
+        |> String.join " "
 
 
-pyramidLines : Pyramid -> List Line
-pyramidLines { basePolygon, top } =
-    let
-        ridges =
-            List.map (Line top) basePolygon
-
-        perimeter =
-            polygonLinesCheating basePolygon
-    in
-        ridges ++ perimeter
-
-
-polygonLines : List Point -> List Line
-polygonLines p =
-    case p of
-        x1 :: x2 :: xs ->
-            Line x1 x2 :: polygonLines (x2 :: xs)
-
-        other ->
-            []
-
-
-polygonLinesCheating : List Point -> List Line
-polygonLinesCheating p =
-    case p of
-        [] ->
-            []
-
-        x :: xs ->
-            polygonLines (x :: xs ++ [ x ])
+border : Svg.Svg msg
+border =
+    Svg.rect
+        [ SvgA.x "2"
+        , SvgA.y "2"
+        , SvgA.width (canvasSize.x - 2 |> toString)
+        , SvgA.height (canvasSize.y - 2 |> toString)
+        , SvgA.fill "none"
+        , SvgA.stroke "black"
+        , SvgA.strokeWidth "0.2"
+        ]
+        []
 
 
 view : Model -> Html Msg
-view model =
-    div []
-        [ svg [ viewBox "0 0 160 100", width "300px" ] []
-        , svg [ viewBox "0 0 160 100", width "300px", shapeRendering "auto" ]
-            (drawLines (pyramidLines model))
-        , br [] []
-        , svg [ viewBox "0 0 160 100", width "300px" ]
-            (drawLines (pyramidLines model))
-        , svg [ viewBox "0 0 160 100", width "300px" ]
-            (drawLines (pyramidLines model))
-        ]
+view ({ basePolygon, top, height } as pyramid) =
+    let
+        -- get scale factor assuming that the tip lies inside the base polygon
+        scaleFactor =
+            0.95 * D.getScaleFactor canvasSize.x canvasSize.y basePolygon
+
+        pyramidDrawing =
+            pyramid
+                |> pyramidLines
+                |> D.scaleLines scaleFactor
+                |> D.drawLines
+
+        annotationsDrawing =
+            [ border ]
+
+        drawing =
+            pyramidDrawing ++ annotationsDrawing
+    in
+        div []
+            [ Svg.svg [ SvgA.viewBox canvas, SvgA.width "600px" ] drawing
+            , br [] []
+            , Svg.svg [ SvgA.viewBox canvas, SvgA.width "300px" ]
+                (border
+                    :: [ Svg.polygon
+                            [ SvgA.fill "none"
+                            , SvgA.stroke "black"
+                            , SvgA.strokeWidth "0.2"
+                            , SvgA.points "5,5 10,50 90,50 50,10 30,5"
+                            ]
+                            []
+                       ]
+                )
+            ]

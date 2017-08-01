@@ -7,14 +7,14 @@ type alias Point =
     }
 
 
+type alias Edge =
+    { start : Point
+    , end : Point
+    }
+
+
 type alias Pyramid =
     { basePolygon : List Point
     , top : Point
     , height : Float
-    }
-
-
-type alias Line =
-    { start : Point
-    , end : Point
     }

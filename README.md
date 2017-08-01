@@ -13,7 +13,7 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 - [ ] **calculate angles**.
 - [x] **generalize** pyramid base shape, re-work types.
 - [ ] **randomization** button.
-- [ ] properly **scale** visualization to fill svg canvas.
+- [x] properly **scale** visualization to fill svg canvas.
 - [ ] **annotate** visualization with angles and lengths. Toggle button.
 - [ ] visualization with material thickness.
 - [ ] compile and visualize **cut list**, calculate m<sup>2</sup> of material required.
