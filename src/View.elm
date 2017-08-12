@@ -7,10 +7,13 @@ module View exposing (..)
 import Html exposing (Html)
 import Svg
 import Svg.Attributes as SvgA
+import Array exposing (Array)
 import Model exposing (Model)
 import Update exposing (Msg)
+import Types exposing (..)
 import Drawing as D
 import Perspective exposing (ViewPoint(..))
+import InputFields exposing (..)
 
 
 canvasSize : { x : Float, y : Float }
@@ -29,11 +32,36 @@ canvas =
         [ SvgA.viewBox canvasString, SvgA.width "600px" ]
 
 
+coordinateFields : Array Point -> Array PointInput
+coordinateFields =
+    Array.indexedMap mkInputs
+
+
+concat3elements : a -> a -> a -> List a
+concat3elements a b c =
+    [ a, b, c ]
+
+
 view : Model -> Html.Html Msg
 view pyramid =
     let
         pyramidDrawing =
             D.drawPyramid pyramid Top
+
+        pointInputs =
+            coordinateFields pyramid.basePolygon
+
+        xInputs =
+            Array.toList <| Array.map .field <| Array.map .x pointInputs
+
+        yInputs =
+            Array.toList <| Array.map .field <| Array.map .y pointInputs
+
+        brs =
+            List.repeat (List.length xInputs) (Html.br [] [])
+
+        inputFields =
+            List.concat <| List.map3 concat3elements xInputs yInputs brs
 
         annotationsDrawing =
             []
@@ -42,18 +70,14 @@ view pyramid =
             []
 
         drawing =
-            pyramidDrawing ++ annotationsDrawing ++ borderDrawing
-
-        draw =
-            Svg.svg canvas
+            Svg.svg canvas <| pyramidDrawing ++ annotationsDrawing ++ borderDrawing
     in
         Html.table []
             [ Html.tr []
                 [ Html.td []
-                    [ Html.text "placeholder"
-                    ]
+                    inputFields
                 , Html.td []
-                    [ draw drawing
+                    [ drawing
                     ]
                 ]
 

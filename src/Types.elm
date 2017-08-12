@@ -27,3 +27,8 @@ type alias Point =
     { x : Float
     , y : Float
     }
+
+
+type Coordinate
+    = X
+    | Y

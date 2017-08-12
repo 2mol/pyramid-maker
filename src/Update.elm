@@ -1,16 +1,18 @@
 module Update exposing (..)
 
+import Array
 import Model exposing (Model)
+import Types exposing (..)
 
 
 type Msg
     = NewPoint
     | RemovePoint Int
-    | ChangePoint String --Int Int Int
+    | ChangePoint Int Coordinate String
 
 
 update : Msg -> Model -> Model
-update msg currentModel =
+update msg ({ basePolygon, top, height } as currentModel) =
     case msg of
         NewPoint ->
             currentModel
@@ -18,5 +20,22 @@ update msg currentModel =
         RemovePoint i ->
             currentModel
 
-        ChangePoint t ->
-            currentModel
+        ChangePoint i coord newValueString ->
+            case ( Array.get i basePolygon, String.toFloat newValueString ) of
+                ( Just point, Ok newValue ) ->
+                    let
+                        updatedPoint =
+                            case coord of
+                                X ->
+                                    { point | x = newValue }
+
+                                Y ->
+                                    { point | y = newValue }
+
+                        newBasePolygon =
+                            Array.set i updatedPoint basePolygon
+                    in
+                        { currentModel | basePolygon = newBasePolygon }
+
+                _ ->
+                    currentModel
