@@ -17,7 +17,7 @@ type alias Model =
 
 type Msg
     = NewPoint
-    | RemovePoint Int
+    | RemovePoint
     | ChangePoint Int Axis String
 
 

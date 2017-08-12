@@ -1,15 +1,19 @@
-module InputFields exposing (..)
+module InputFields
+    exposing
+        ( pointsToInputs
+        , addRemoveButtons
+        )
 
 import Array exposing (Array)
 import Html exposing (Html)
 import Html.Attributes as HtmlA
-import Html.Events exposing (onInput)
+import Html.Events exposing (onInput, onClick)
 import Types exposing (..)
 import Config exposing (canvasSize)
 
 
-formatInputs : Array Point -> List (Html Msg)
-formatInputs points =
+pointsToInputs : Array Point -> List (Html Msg)
+pointsToInputs points =
     let
         pointInputs =
             Array.indexedMap mkInputs points
@@ -56,3 +60,15 @@ mkInputs index p =
         { x = { index = index, field = inputField X .x }
         , y = { index = index, field = inputField Y .y }
         }
+
+
+
+--
+
+
+addRemoveButtons : Html Msg
+addRemoveButtons =
+    Html.div []
+        [ Html.button [ onClick RemovePoint ] [ Html.text "-" ]
+        , Html.button [ onClick NewPoint ] [ Html.text "+" ]
+        ]

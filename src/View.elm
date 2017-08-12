@@ -8,7 +8,7 @@ import Svg
 import Types exposing (..)
 import Drawing as D
 import Perspective exposing (ViewPoint(..))
-import InputFields exposing (formatInputs)
+import InputFields exposing (pointsToInputs, addRemoveButtons)
 
 
 view : Model -> Html Msg
@@ -16,11 +16,14 @@ view pyramid =
     let
         -- title =
         --     D.drawTitle "Pyramid Maker"
-        inputFields =
-            formatInputs pyramid.basePolygon
+        coordinateFields =
+            pointsToInputs pyramid.basePolygon
+
+        inputs =
+            addRemoveButtons :: coordinateFields
 
         inputColumn =
-            D.wrapInputColumn inputFields "Pyramid Maker"
+            D.wrapInputColumn inputs "Pyramid Maker"
 
         annotationsDrawing =
             []

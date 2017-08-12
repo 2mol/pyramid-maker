@@ -11,7 +11,8 @@ whatever =
         , Point 100 300
         , Point 300 400
         , Point 500 150
-        , Point 250 20
+        , Point 250 5
+        , Point 140 50
         ]
 
 

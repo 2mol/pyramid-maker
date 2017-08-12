@@ -135,11 +135,8 @@ perimeterScanner nextPoint lastEdge =
 
 
 wrapInputColumn : List (Html Msg) -> String -> Html Msg
-wrapInputColumn whatever title =
+wrapInputColumn someHtml title =
     let
-        enrichedWhatever =
-            drawTitle title :: whatever
-
         content =
             Html.div
                 [ HtmlA.style
@@ -147,7 +144,7 @@ wrapInputColumn whatever title =
                     , ( "padding", "10px" )
                     ]
                 ]
-                enrichedWhatever
+                (drawTitle title :: someHtml)
     in
         Html.td
             [ HtmlA.style [ ( "vertical-align", "top" ) ] ]

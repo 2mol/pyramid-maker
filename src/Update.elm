@@ -8,10 +8,14 @@ update : Msg -> Model -> Model
 update msg ({ basePolygon, top, height } as currentModel) =
     case msg of
         NewPoint ->
-            currentModel
+            let
+                newPoint =
+                    Point 50 50
+            in
+                { currentModel | basePolygon = Array.push newPoint basePolygon }
 
-        RemovePoint i ->
-            currentModel
+        RemovePoint ->
+            { currentModel | basePolygon = Array.slice 0 -1 basePolygon }
 
         ChangePoint i coord newValueString ->
             case ( Array.get i basePolygon, String.toFloat newValueString ) of
