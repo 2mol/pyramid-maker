@@ -1,5 +1,7 @@
 module Types exposing (..)
 
+import Array exposing (Array)
+
 
 type alias Point =
     { x : Float
@@ -14,7 +16,7 @@ type alias Edge =
 
 
 type alias Pyramid =
-    { basePolygon : List Point
+    { basePolygon : Array Point
     , top : Point
     , height : Float
     }

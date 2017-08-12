@@ -3,6 +3,10 @@ module Drawing exposing (..)
 import Svg
 import Svg.Attributes as SvgA
 import Types exposing (..)
+import Utils as U
+
+
+-- Drawing Lines:
 
 
 drawLine : Edge -> Svg.Svg msg
@@ -23,6 +27,10 @@ drawLine { start, end } =
 drawLines : List Edge -> List (Svg.Svg msg)
 drawLines l =
     List.map drawLine l
+
+
+
+-- Scaling Stuff:
 
 
 scale : Float -> Float -> Float -> Float -> Float
@@ -68,4 +76,19 @@ scaleLines r edges =
 
 
 
--- some static stuff:
+-- Text on drawing:
+
+
+lineAnnotation : String -> Edge -> Svg.Svg msg
+lineAnnotation label edge =
+    let
+        pos =
+            U.lineMiddle edge
+    in
+        Svg.text_
+            [ SvgA.x <| toString <| pos.x
+            , SvgA.y <| toString <| pos.y
+            , SvgA.fontFamily "sans-serif"
+            , SvgA.fontSize "4"
+            ]
+            [ Svg.text label ]

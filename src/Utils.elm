@@ -1,18 +1,23 @@
-module Utils exposing (pyramidLines)
+module Utils
+    exposing
+        ( pyramidEdges
+        , lineMiddle
+        )
 
 import Types exposing (..)
+import Array exposing (Array)
 
 
-pyramidLines : Pyramid -> List Edge
-pyramidLines { basePolygon, top } =
+pyramidEdges : Pyramid -> List Edge
+pyramidEdges { basePolygon, top } =
     let
         ridges =
-            List.map (Edge top) basePolygon
+            Array.map (Edge top) basePolygon
 
         perimeter =
-            polygonLines basePolygon
+            Array.fromList <| polygonLines basePolygon
     in
-        ridges ++ perimeter
+        Array.toList <| Array.append ridges perimeter
 
 
 
@@ -26,25 +31,42 @@ pyramidLines { basePolygon, top } =
 --         newPyramid =
 --             { pyramid | basePolygon = newBasePolygon, top = newTop }
 --     in
---         pyramidLines newPyramid
+--         pyramidEdges newPyramid
 
 
-polygonLinesHelper : List Point -> List Edge
+polygonLinesHelper : Array Point -> List Edge
 polygonLinesHelper p =
     -- this function only manages to give the perimeter with last line missing
-    case p of
-        x1 :: x2 :: xs ->
-            Edge x1 x2 :: polygonLinesHelper (x2 :: xs)
+    let
+        pl =
+            Array.toList p
+    in
+        case pl of
+            x1 :: x2 :: xs ->
+                Edge x1 x2 :: polygonLinesHelper (Array.fromList (x2 :: xs))
 
-        other ->
-            []
+            other ->
+                []
 
 
-polygonLines : List Point -> List Edge
+polygonLines : Array Point -> List Edge
 polygonLines p =
-    case p of
-        [] ->
-            []
+    if Array.isEmpty p then
+        []
+    else
+        polygonLinesHelper (Array.append p (Array.slice 0 1 p))
 
-        x :: xs ->
-            polygonLinesHelper (x :: xs ++ [ x ])
+
+
+-- case p of
+--     [] ->
+--         []
+--     x :: xs ->
+--         polygonLinesHelper (x :: xs ++ [ x ])
+
+
+lineMiddle : Edge -> Point
+lineMiddle { start, end } =
+    { x = (start.x + end.x) / 2
+    , y = (start.y + end.y) / 2
+    }
