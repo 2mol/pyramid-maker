@@ -1,6 +1,7 @@
 module Types exposing (..)
 
 import Array exposing (Array)
+import Html exposing (Html)
 
 
 {-| Simplified pyramid definition, so that the
@@ -10,6 +11,16 @@ Assume only a single pyramid tip, because it guarantees
 unambiguous triangular sides.
 
 -}
+type alias Model =
+    Pyramid
+
+
+type Msg
+    = NewPoint
+    | RemovePoint Int
+    | ChangePoint Int Axis String
+
+
 type alias Pyramid =
     { basePolygon : Array Point
     , top : Point
@@ -32,3 +43,15 @@ type alias Point =
 type Axis
     = X
     | Y
+
+
+type alias PointInput =
+    { x : CoordinatesInput
+    , y : CoordinatesInput
+    }
+
+
+type alias CoordinatesInput =
+    { index : Int
+    , field : Html Msg
+    }

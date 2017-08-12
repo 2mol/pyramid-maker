@@ -1,14 +1,7 @@
 module Update exposing (..)
 
 import Array
-import Model exposing (Model)
 import Types exposing (..)
-
-
-type Msg
-    = NewPoint
-    | RemovePoint Int
-    | ChangePoint Int Axis String
 
 
 update : Msg -> Model -> Model

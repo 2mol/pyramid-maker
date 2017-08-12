@@ -6,19 +6,6 @@ import Html.Attributes as HtmlA
 import Html.Events exposing (onInput)
 import Types exposing (..)
 import Config exposing (canvasSize)
-import Update exposing (Msg(..))
-
-
-type alias CoordinatesInput =
-    { index : Int
-    , field : Html Msg
-    }
-
-
-type alias PointInput =
-    { x : CoordinatesInput
-    , y : CoordinatesInput
-    }
 
 
 formatInputs : Array Point -> List (Html Msg)
@@ -40,6 +27,11 @@ formatInputs points =
             List.repeat (List.length xInputs) (Html.br [] [])
     in
         List.concat <| List.map3 concat3elements xInputs yInputs breaks
+
+
+concat3elements : a -> a -> a -> List a
+concat3elements a b c =
+    [ a, b, c ]
 
 
 mkInputs : Int -> Point -> PointInput
@@ -64,8 +56,3 @@ mkInputs index p =
         { x = { index = index, field = inputField X .x }
         , y = { index = index, field = inputField Y .y }
         }
-
-
-concat3elements : a -> a -> a -> List a
-concat3elements a b c =
-    [ a, b, c ]

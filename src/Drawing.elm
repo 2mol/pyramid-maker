@@ -26,7 +26,6 @@ import Svg.Attributes as SvgA
 import Array exposing (Array)
 import Types exposing (..)
 import Config exposing (..)
-import Update exposing (Msg)
 import Perspective exposing (ViewPoint(..))
 
 
