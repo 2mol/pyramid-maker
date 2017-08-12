@@ -8,12 +8,12 @@ whateverPyramid : Pyramid
 whateverPyramid =
     Pyramid
         (A.fromList
-            [ Point 5 5
+            [ Point 50 50
             , Point 100 300
             , Point 300 400
-            , Point 500 200
-            , Point 250 50
+            , Point 500 150
+            , Point 250 20
             ]
         )
-        (Point 300 200)
-        1
+        (Point 320 200)
+        10

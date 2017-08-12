@@ -35,14 +35,27 @@ import Perspective exposing (ViewPoint(..))
 
 
 drawPyramid : Pyramid -> ViewPoint -> List (Svg Msg)
-drawPyramid pyramid vp =
+drawPyramid ({ basePolygon, top, height } as pyramid) vp =
     case vp of
         Top ->
             let
                 edges =
-                    Array.toList <| pyramidEdges pyramid
+                    Array.toList <| pyramidToEdges pyramid
+
+                pyramidLines =
+                    List.map drawEdge edges
+
+                topCircle =
+                    Svg.circle
+                        [ SvgA.cx <| toString top.x
+                        , SvgA.cy <| toString top.y
+                        , SvgA.r "4"
+                        , SvgA.fill "#dd0000"
+                        , SvgA.stroke "none"
+                        ]
+                        []
             in
-                List.map drawEdge edges
+                pyramidLines ++ [ topCircle ]
 
 
 drawEdge : Edge -> Svg Msg
@@ -60,35 +73,32 @@ drawEdge { start, end } =
         Svg.line (svgLineCoord ++ lineParameters) []
 
 
-pyramidEdges : Pyramid -> Array Edge
-pyramidEdges { basePolygon, top, height } =
+pyramidToEdges : Pyramid -> Array Edge
+pyramidToEdges { basePolygon, top, height } =
     let
         ridges =
             Array.map (Edge top) basePolygon
 
         perimeter =
-            polygonEdges basePolygon
+            polygonToEdges basePolygon
     in
         Array.append ridges perimeter
 
 
-polygonEdges : Array Point -> Array Edge
-polygonEdges p =
+polygonToEdges : Array Point -> Array Edge
+polygonToEdges p =
     let
         pList =
             Array.toList p
 
-        maybeFirstPoint =
-            Array.get 0 p
-
         maybeLastPoint =
             lastElem p
     in
-        case ( maybeFirstPoint, maybeLastPoint ) of
-            ( Just lastPoint, Just firstPoint ) ->
+        case maybeLastPoint of
+            Just lastPoint ->
                 let
                     lastEdge =
-                        Edge firstPoint firstPoint
+                        Edge lastPoint lastPoint
                 in
                     Array.fromList <| List.scanl perimeterScanner lastEdge pList
 

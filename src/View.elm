@@ -43,13 +43,36 @@ view pyramid =
 
         drawing =
             pyramidDrawing ++ annotationsDrawing ++ borderDrawing
+
+        draw =
+            Svg.svg canvas
     in
-        Html.div []
-            [ Svg.svg canvas drawing
+        Html.table []
+            [ Html.tr []
+                [ Html.td []
+                    [ Html.text "placeholder"
+                    ]
+                , Html.td []
+                    [ draw drawing
+                    ]
+                ]
+
+            -- , Html.tr []
+            --     [ Html.td []
+            --         [ draw drawing
+            --         ]
+            --     , Html.td []
+            --         [ draw drawing
+            --         ]
+            --     ]
             ]
 
 
 
+-- Html.div
+-- []
+-- [ Svg.svg canvas drawing
+-- ]
 -- let
 --     edges =
 --         pyramid |> U.pyramidEdges
