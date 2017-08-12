@@ -20,6 +20,27 @@ type alias PointInput =
     }
 
 
+formatInputs : Array Point -> List (Html Msg)
+formatInputs points =
+    let
+        pointInputs =
+            Array.indexedMap mkInputs points
+
+        axisSelector =
+            \axis -> Array.toList <| Array.map .field <| Array.map axis pointInputs
+
+        xInputs =
+            axisSelector .x
+
+        yInputs =
+            axisSelector .y
+
+        breaks =
+            List.repeat (List.length xInputs) (Html.br [] [])
+    in
+        List.concat <| List.map3 concat3elements xInputs yInputs breaks
+
+
 mkInputs : Int -> Point -> PointInput
 mkInputs index p =
     let
@@ -48,11 +69,6 @@ mkInputs index p =
         { x = { index = index, field = inputFieldX }
         , y = { index = index, field = inputFieldY }
         }
-
-
-coordinateFields : Array Point -> Array PointInput
-coordinateFields =
-    Array.indexedMap mkInputs
 
 
 concat3elements : a -> a -> a -> List a
