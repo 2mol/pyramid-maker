@@ -3,9 +3,17 @@ module Types exposing (..)
 import Array exposing (Array)
 
 
-type alias Point =
-    { x : Float
-    , y : Float
+{-| Simplified pyramid definition, so that the
+base polygon always lies in the z=0 plane.
+
+Assume only a single pyramid tip, because it guarantees
+unambiguous triangular sides.
+
+-}
+type alias Pyramid =
+    { basePolygon : Array Point
+    , top : Point
+    , height : Float
     }
 
 
@@ -15,8 +23,7 @@ type alias Edge =
     }
 
 
-type alias Pyramid =
-    { basePolygon : Array Point
-    , top : Point
-    , height : Float
+type alias Point =
+    { x : Float
+    , y : Float
     }

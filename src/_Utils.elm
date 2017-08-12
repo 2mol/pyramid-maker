@@ -1,4 +1,4 @@
-module Utils
+module Utils_
     exposing
         ( pyramidEdges
         , lineMiddle
