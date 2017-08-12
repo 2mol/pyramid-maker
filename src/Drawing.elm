@@ -25,21 +25,9 @@ import Svg exposing (Svg)
 import Svg.Attributes as SvgA
 import Array exposing (Array)
 import Types exposing (..)
+import Config exposing (..)
 import Update exposing (Msg)
 import Perspective exposing (ViewPoint(..))
-
-
-{- want to have the following flow
-
-   pyramid -> [Edges] -> [drawnEdges] -> drawing
-
--}
--- some parameters:
-
-
-canvasSize : { x : Float, y : Float }
-canvasSize =
-    { x = 600, y = 400 }
 
 
 canvas : List (Html.Attribute Msg)
@@ -72,13 +60,13 @@ drawPyramid ({ basePolygon, top, height } as pyramid) vp =
                     Svg.circle
                         [ SvgA.cx <| toString top.x
                         , SvgA.cy <| toString top.y
-                        , SvgA.r "4"
-                        , SvgA.fill "#dd0000"
-                        , SvgA.stroke "none"
+                        , SvgA.r "3"
+                        , SvgA.fill "none"
+                        , SvgA.stroke "#dd0000"
                         ]
                         []
             in
-                pyramidLines ++ [ topCircle ]
+                topCircle :: pyramidLines
 
 
 drawEdge : Edge -> Svg Msg
@@ -145,11 +133,6 @@ perimeterScanner nextPoint lastEdge =
 
 
 -- prettifying stuff:
-
-
-grey : String
-grey =
-    "#fafafafa"
 
 
 wrapInputColumn : List (Html Msg) -> String -> Html Msg

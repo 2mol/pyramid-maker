@@ -1,13 +1,13 @@
 module Presets exposing (..)
 
 import Types exposing (..)
-import Array as A
+import Array
 
 
 whateverPyramid : Pyramid
 whateverPyramid =
     Pyramid
-        (A.fromList
+        (Array.fromList
             [ Point 50 50
             , Point 100 300
             , Point 300 400

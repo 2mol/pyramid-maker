@@ -29,6 +29,6 @@ type alias Point =
     }
 
 
-type Coordinate
+type Axis
     = X
     | Y

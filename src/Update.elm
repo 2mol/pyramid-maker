@@ -8,7 +8,7 @@ import Types exposing (..)
 type Msg
     = NewPoint
     | RemovePoint Int
-    | ChangePoint Int Coordinate String
+    | ChangePoint Int Axis String
 
 
 update : Msg -> Model -> Model

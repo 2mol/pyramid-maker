@@ -4,8 +4,9 @@ import Array exposing (Array)
 import Html exposing (Html)
 import Html.Attributes as HtmlA
 import Html.Events exposing (onInput)
-import Update exposing (Msg(..))
 import Types exposing (..)
+import Config exposing (canvasSize)
+import Update exposing (Msg(..))
 
 
 type alias CoordinatesInput =
@@ -44,30 +45,24 @@ formatInputs points =
 mkInputs : Int -> Point -> PointInput
 mkInputs index p =
     let
-        inputFieldX =
-            Html.input
-                [ HtmlA.type_ "number"
+        inputField =
+            \axis ->
+                \axisAccessor ->
+                    Html.input
+                        [ HtmlA.type_ "number"
 
-                -- , HtmlA.placeholder <| toString i
-                -- , HtmlA.disabled True
-                --, HtmlA.name "quantity"
-                -- , HtmlA.min "0"
-                -- , HtmlA.max "10"
-                , HtmlA.defaultValue <| toString p.x
-                , onInput (ChangePoint index X)
-                ]
-                []
-
-        inputFieldY =
-            Html.input
-                [ HtmlA.type_ "number"
-                , HtmlA.defaultValue <| toString p.y
-                , onInput (ChangePoint index Y)
-                ]
-                []
+                        -- , HtmlA.placeholder <| toString i
+                        -- , HtmlA.disabled True
+                        --, HtmlA.name "quantity"
+                        , HtmlA.min "0"
+                        , HtmlA.max <| toString <| axisAccessor canvasSize
+                        , HtmlA.defaultValue <| toString <| axisAccessor p
+                        , onInput (ChangePoint index axis)
+                        ]
+                        []
     in
-        { x = { index = index, field = inputFieldX }
-        , y = { index = index, field = inputFieldY }
+        { x = { index = index, field = inputField X .x }
+        , y = { index = index, field = inputField Y .y }
         }
 
 
