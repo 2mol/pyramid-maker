@@ -6,47 +6,19 @@ module View exposing (..)
 
 import Html exposing (Html)
 import Svg
-import Svg.Attributes as SvgA
 import Array exposing (Array)
 import Model exposing (Model)
 import Update exposing (Msg)
-import Types exposing (..)
-import Drawing as D
+import Drawing exposing (canvas, drawPyramid)
 import Perspective exposing (ViewPoint(..))
 import InputFields exposing (..)
-
-
-canvasSize : { x : Float, y : Float }
-canvasSize =
-    { x = 600, y = 400 }
-
-
-canvas : List (Html.Attribute Msg)
-canvas =
-    let
-        canvasString =
-            [ 0, 0, canvasSize.x, canvasSize.y ]
-                |> List.map toString
-                |> String.join " "
-    in
-        [ SvgA.viewBox canvasString, SvgA.width "600px" ]
-
-
-coordinateFields : Array Point -> Array PointInput
-coordinateFields =
-    Array.indexedMap mkInputs
-
-
-concat3elements : a -> a -> a -> List a
-concat3elements a b c =
-    [ a, b, c ]
 
 
 view : Model -> Html.Html Msg
 view pyramid =
     let
         pyramidDrawing =
-            D.drawPyramid pyramid Top
+            drawPyramid pyramid Top
 
         pointInputs =
             coordinateFields pyramid.basePolygon
@@ -57,11 +29,11 @@ view pyramid =
         yInputs =
             Array.toList <| Array.map .field <| Array.map .y pointInputs
 
-        brs =
+        breaks =
             List.repeat (List.length xInputs) (Html.br [] [])
 
         inputFields =
-            List.concat <| List.map3 concat3elements xInputs yInputs brs
+            List.concat <| List.map3 concat3elements xInputs yInputs breaks
 
         annotationsDrawing =
             []
@@ -90,34 +62,3 @@ view pyramid =
             --         ]
             --     ]
             ]
-
-
-
--- Html.div
--- []
--- [ Svg.svg canvas drawing
--- ]
--- let
---     edges =
---         pyramid |> U.pyramidEdges
---     pyramidDrawing =
---         edges |> D.drawLines
---     annotations =
---         List.map (D.lineAnnotation "25.8°") edges
---     drawing =
---         annotations ++ pyramidDrawing ++ [ D.border ]
--- in
---     Html.div []
---         [ Html.table []
---             [ Html.tr []
---                 [ Html.td []
---                     ([ Html.br [] []
---                      , Html.br [] []
---                      ]
---                     )
---                 , Html.td []
---                     [ Svg.svg [ SvgA.viewBox canvas, SvgA.width "600px" ] drawing
---                     ]
---                 ]
---             ]
---         ]

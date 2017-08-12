@@ -19,6 +19,7 @@ module Drawing exposing (..)
 
 -}
 
+import Html
 import Svg exposing (Svg)
 import Svg.Attributes as SvgA
 import Array exposing (Array)
@@ -32,6 +33,27 @@ import Perspective exposing (ViewPoint(..))
    pyramid -> [Edges] -> [drawnEdges] -> drawing
 
 -}
+-- some parameters:
+
+
+canvasSize : { x : Float, y : Float }
+canvasSize =
+    { x = 600, y = 400 }
+
+
+canvas : List (Html.Attribute Msg)
+canvas =
+    let
+        canvasString =
+            [ 0, 0, canvasSize.x, canvasSize.y ]
+                |> List.map toString
+                |> String.join " "
+    in
+        [ SvgA.viewBox canvasString, SvgA.width "600px" ]
+
+
+
+-- Drawing the Pyramid:
 
 
 drawPyramid : Pyramid -> ViewPoint -> List (Svg Msg)
@@ -118,3 +140,43 @@ perimeterScanner nextPoint lastEdge =
             lastEdge
     in
         Edge end nextPoint
+
+
+
+-- Drawing other Stuff:
+
+
+lineAnnotation : String -> Edge -> Svg.Svg msg
+lineAnnotation label edge =
+    let
+        pos =
+            lineMiddle edge
+    in
+        Svg.text_
+            [ SvgA.x <| toString <| pos.x
+            , SvgA.y <| toString <| pos.y
+            , SvgA.fontFamily "sans-serif"
+            , SvgA.fontSize "4"
+            ]
+            [ Svg.text label ]
+
+
+lineMiddle : Edge -> Point
+lineMiddle { start, end } =
+    { x = (start.x + end.x) / 2
+    , y = (start.y + end.y) / 2
+    }
+
+
+border : Svg.Svg msg
+border =
+    Svg.rect
+        [ SvgA.x "2"
+        , SvgA.y "2"
+        , SvgA.width <| toString <| canvasSize.x - 1
+        , SvgA.height <| toString <| canvasSize.y - 1
+        , SvgA.fill "none"
+        , SvgA.stroke "#eeeeee"
+        , SvgA.strokeWidth "0.5"
+        ]
+        []

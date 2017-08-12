@@ -1,5 +1,6 @@
 module InputFields exposing (..)
 
+import Array exposing (Array)
 import Html exposing (Html)
 import Html.Attributes as HtmlA
 import Html.Events exposing (onInput)
@@ -47,3 +48,13 @@ mkInputs index p =
         { x = { index = index, field = inputFieldX }
         , y = { index = index, field = inputFieldY }
         }
+
+
+coordinateFields : Array Point -> Array PointInput
+coordinateFields =
+    Array.indexedMap mkInputs
+
+
+concat3elements : a -> a -> a -> List a
+concat3elements a b c =
+    [ a, b, c ]
