@@ -14,7 +14,11 @@ update msg ({ basePolygon, top, height } as currentModel) =
             { currentModel | basePolygon = Array.slice 0 -1 basePolygon }
 
         ChangeCoordinate index axis newValueString ->
-            changeCoordinate index axis newValueString currentModel
+            let
+                newBasePolygon =
+                    changeCoordinate index axis newValueString basePolygon
+            in
+                { currentModel | basePolygon = newBasePolygon }
 
         _ ->
             currentModel
@@ -39,9 +43,9 @@ lastElem =
     Array.foldl (Just >> always) Nothing
 
 
-changeCoordinate : Int -> Axis -> String -> Model -> Model
-changeCoordinate index axis newValueString currentModel =
-    case ( Array.get index currentModel.basePolygon, String.toFloat newValueString ) of
+changeCoordinate : Int -> Axis -> String -> Array Point -> Array Point
+changeCoordinate index axis newValueString basePolygon =
+    case ( Array.get index basePolygon, String.toFloat newValueString ) of
         ( Just point, Ok newValue ) ->
             let
                 updatedPoint =
@@ -51,11 +55,8 @@ changeCoordinate index axis newValueString currentModel =
 
                         Y ->
                             { point | y = newValue }
-
-                newBasePolygon =
-                    Array.set index updatedPoint currentModel.basePolygon
             in
-                { currentModel | basePolygon = newBasePolygon }
+                Array.set index updatedPoint basePolygon
 
         _ ->
-            currentModel
+            basePolygon
