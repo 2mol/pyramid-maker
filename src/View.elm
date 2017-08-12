@@ -8,7 +8,7 @@ import Html exposing (Html)
 import Svg
 import Model exposing (Model)
 import Update exposing (Msg)
-import Drawing exposing (canvas, drawPyramid)
+import Drawing as D
 import Perspective exposing (ViewPoint(..))
 import InputFields exposing (formatInputs)
 
@@ -16,11 +16,16 @@ import InputFields exposing (formatInputs)
 -- List.concat <| fields ++ [ breaks ]
 
 
-view : Model -> Html.Html Msg
+view : Model -> Html Msg
 view pyramid =
     let
+        -- title =
+        --     D.drawTitle "Pyramid Maker"
         inputFields =
             formatInputs pyramid.basePolygon
+
+        inputColumn =
+            D.wrapInputColumn inputFields "Pyramid Maker"
 
         annotationsDrawing =
             []
@@ -29,15 +34,14 @@ view pyramid =
             []
 
         drawing =
-            Svg.svg canvas <|
-                (drawPyramid pyramid Top)
+            Svg.svg D.canvas <|
+                (D.drawPyramid pyramid Top)
                     ++ annotationsDrawing
-                    ++ borderDrawing
+                    ++ [ D.border ]
     in
         Html.table []
             [ Html.tr []
-                [ Html.td []
-                    inputFields
+                [ inputColumn
                 , Html.td []
                     [ drawing
                     ]

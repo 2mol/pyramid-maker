@@ -19,7 +19,8 @@ module Drawing exposing (..)
 
 -}
 
-import Html
+import Html exposing (Html)
+import Html.Attributes as HtmlA
 import Svg exposing (Svg)
 import Svg.Attributes as SvgA
 import Array exposing (Array)
@@ -143,11 +144,69 @@ perimeterScanner nextPoint lastEdge =
 
 
 
--- Drawing other Stuff:
+-- prettifying stuff:
 
 
-lineAnnotation : String -> Edge -> Svg.Svg msg
-lineAnnotation label edge =
+grey : String
+grey =
+    "#fafafafa"
+
+
+wrapInputColumn : List (Html Msg) -> String -> Html Msg
+wrapInputColumn whatever title =
+    let
+        enrichedWhatever =
+            drawTitle title :: whatever
+
+        content =
+            Html.div
+                [ HtmlA.style
+                    [ ( "backgroundColor", grey )
+                    , ( "padding", "10px" )
+                    ]
+                ]
+                enrichedWhatever
+    in
+        Html.td
+            [ HtmlA.style [ ( "vertical-align", "top" ) ] ]
+            [ content ]
+
+
+drawTitle : String -> Html Msg
+drawTitle title =
+    Html.div
+        [ HtmlA.style
+            [ ( "padding", "10px" )
+            , ( "font-size", "39px" )
+            , ( "font-family", "sans-serif" )
+            , ( "color", "#ad296f" )
+            ]
+        ]
+        [ Html.text title
+        , Html.br [] []
+        ]
+
+
+border : Svg.Svg msg
+border =
+    Svg.rect
+        [ SvgA.x "2"
+        , SvgA.y "2"
+        , SvgA.width <| toString <| canvasSize.x - 3
+        , SvgA.height <| toString <| canvasSize.y - 3
+        , SvgA.fill "none"
+        , SvgA.stroke grey
+        , SvgA.strokeWidth "1"
+        ]
+        []
+
+
+
+-- annotations:
+
+
+edgeAnnotation : String -> Edge -> Svg.Svg msg
+edgeAnnotation label edge =
     let
         pos =
             lineMiddle edge
@@ -166,17 +225,3 @@ lineMiddle { start, end } =
     { x = (start.x + end.x) / 2
     , y = (start.y + end.y) / 2
     }
-
-
-border : Svg.Svg msg
-border =
-    Svg.rect
-        [ SvgA.x "2"
-        , SvgA.y "2"
-        , SvgA.width <| toString <| canvasSize.x - 1
-        , SvgA.height <| toString <| canvasSize.y - 1
-        , SvgA.fill "none"
-        , SvgA.stroke "#eeeeee"
-        , SvgA.strokeWidth "0.5"
-        ]
-        []
