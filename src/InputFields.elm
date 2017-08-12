@@ -53,7 +53,7 @@ mkInputs index p =
                         , HtmlA.min "0"
                         , HtmlA.max <| toString <| axisAccessor canvasSize
                         , HtmlA.defaultValue <| toString <| axisAccessor p
-                        , onInput (ChangePoint index axis)
+                        , onInput (ChangeCoordinate index axis)
                         ]
                         []
     in

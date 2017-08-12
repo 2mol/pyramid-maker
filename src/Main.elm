@@ -4,8 +4,9 @@ module Main exposing (main)
 @docs main
 -}
 
+-- import Mouse exposing (Position)
+
 import Html
-import Mouse exposing (Position)
 import Types exposing (..)
 import Update exposing (update)
 import View exposing (view)

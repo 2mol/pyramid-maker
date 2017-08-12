@@ -18,7 +18,10 @@ type alias Model =
 type Msg
     = NewPoint
     | RemovePoint
-    | ChangePoint Int Axis String
+    | ChangeCoordinate Int Axis String
+    | DragStart Point
+    | DragAt Point
+    | DragEnd Point
 
 
 type alias Pyramid =
