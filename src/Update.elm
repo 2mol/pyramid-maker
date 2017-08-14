@@ -10,7 +10,10 @@ update msg ({ basePolygon, top, height } as currentModel) =
         newModel =
             case msg of
                 NewPoint ->
-                    { currentModel | basePolygon = addPoint basePolygon }
+                    if Array.length basePolygon < 12 then
+                        { currentModel | basePolygon = addPoint basePolygon }
+                    else
+                        currentModel
 
                 RemovePoint ->
                     { currentModel | basePolygon = Array.slice 0 -1 basePolygon }
@@ -30,6 +33,10 @@ update msg ({ basePolygon, top, height } as currentModel) =
                     currentModel
     in
         ( newModel, Cmd.none )
+
+
+
+-- helper functions:
 
 
 addPoint : Array Point -> Array Point

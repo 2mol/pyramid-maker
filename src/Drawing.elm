@@ -27,6 +27,7 @@ import Array exposing (Array)
 import Types exposing (..)
 import Config exposing (..)
 import Perspective exposing (ViewPoint(..))
+import Math exposing (..)
 
 
 canvas : List (Html.Attribute Msg)
@@ -81,53 +82,6 @@ drawEdge { start, end } =
             [ SvgA.stroke "black", SvgA.strokeWidth "0.5" ]
     in
         Svg.line (svgLineCoord ++ lineParameters) []
-
-
-pyramidToEdges : Pyramid -> Array Edge
-pyramidToEdges { basePolygon, top, height } =
-    let
-        ridges =
-            Array.map (Edge top) basePolygon
-
-        perimeter =
-            polygonToEdges basePolygon
-    in
-        Array.append ridges perimeter
-
-
-polygonToEdges : Array Point -> Array Edge
-polygonToEdges p =
-    let
-        pList =
-            Array.toList p
-
-        maybeLastPoint =
-            lastElem p
-    in
-        case maybeLastPoint of
-            Just lastPoint ->
-                let
-                    lastEdge =
-                        Edge lastPoint lastPoint
-                in
-                    Array.fromList <| List.scanl perimeterScanner lastEdge pList
-
-            _ ->
-                Array.empty
-
-
-lastElem : Array a -> Maybe a
-lastElem =
-    Array.foldl (Just >> always) Nothing
-
-
-perimeterScanner : Point -> Edge -> Edge
-perimeterScanner nextPoint lastEdge =
-    let
-        { start, end } =
-            lastEdge
-    in
-        Edge end nextPoint
 
 
 
