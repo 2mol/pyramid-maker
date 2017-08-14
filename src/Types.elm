@@ -47,23 +47,3 @@ type alias Point =
     { x : Float
     , y : Float
     }
-
-
-type alias PointChanger =
-    { newCoordinates : Point
-    , index : Int
-    , fieldX : Html Msg
-    , fieldY : Html Msg
-    }
-
-
-type alias PointInput =
-    { x : CoordinatesInput
-    , y : CoordinatesInput
-    }
-
-
-type alias CoordinatesInput =
-    { index : Int
-    , field : Html Msg
-    }
