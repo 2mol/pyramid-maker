@@ -4,9 +4,8 @@ module Main exposing (main)
 @docs main
 -}
 
--- import Mouse exposing (Position)
-
 import Html
+import Mouse
 import Types exposing (..)
 import Update exposing (update)
 import View exposing (view)
@@ -17,11 +16,24 @@ import Presets
 -}
 main : Program Never Model Msg
 main =
-    Html.beginnerProgram
-        { model = Presets.whateverPyramid
+    Html.program
+        { init = init
         , view = view
         , update = update
+        , subscriptions = subscriptions
         }
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( Presets.whateverPyramid, Cmd.none )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.batch
+        [ Mouse.clicks MouseMsg
+        ]
 
 
 

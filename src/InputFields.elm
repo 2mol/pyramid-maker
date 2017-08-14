@@ -2,6 +2,7 @@ module InputFields
     exposing
         ( pointsToInputs
         , addRemoveButtons
+        , randomButton
         )
 
 import Array exposing (Array)
@@ -10,6 +11,9 @@ import Html.Attributes as HtmlA
 import Html.Events exposing (onInput, onClick)
 import Types exposing (..)
 import Config exposing (canvasSize)
+
+
+-- Input Fields:
 
 
 pointsToInputs : Array Point -> List (Html Msg)
@@ -46,6 +50,10 @@ mkInputs index p =
                 \axisAccessor ->
                     Html.input
                         [ HtmlA.type_ "number"
+                        , HtmlA.step "any"
+                        , HtmlA.style
+                            [ ( "width", "80px" )
+                            ]
 
                         -- , HtmlA.placeholder <| toString i
                         -- , HtmlA.disabled True
@@ -63,7 +71,7 @@ mkInputs index p =
 
 
 
---
+-- Buttons:
 
 
 addRemoveButtons : Html Msg
@@ -71,4 +79,11 @@ addRemoveButtons =
     Html.div []
         [ Html.button [ onClick RemovePoint ] [ Html.text "-" ]
         , Html.button [ onClick NewPoint ] [ Html.text "+" ]
+        ]
+
+
+randomButton : Html Msg
+randomButton =
+    Html.div []
+        [ Html.button [ onClick Random ] [ Html.text "Random" ]
         ]

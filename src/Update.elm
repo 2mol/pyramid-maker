@@ -4,24 +4,32 @@ import Array exposing (Array)
 import Types exposing (..)
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg ({ basePolygon, top, height } as currentModel) =
-    case msg of
-        NewPoint ->
-            { currentModel | basePolygon = addPoint basePolygon }
+    let
+        newModel =
+            case msg of
+                NewPoint ->
+                    { currentModel | basePolygon = addPoint basePolygon }
 
-        RemovePoint ->
-            { currentModel | basePolygon = Array.slice 0 -1 basePolygon }
+                RemovePoint ->
+                    { currentModel | basePolygon = Array.slice 0 -1 basePolygon }
 
-        ChangeCoordinate index axis newValueString ->
-            let
-                newBasePolygon =
-                    changeCoordinate index axis newValueString basePolygon
-            in
-                { currentModel | basePolygon = newBasePolygon }
+                ChangeCoordinate index axis newValueString ->
+                    let
+                        newBasePolygon =
+                            changeCoordinate index axis newValueString basePolygon
+                    in
+                        { currentModel | basePolygon = newBasePolygon }
 
-        _ ->
-            currentModel
+                MouseMsg position ->
+                    -- { currentModel | basePolygon = addPoint basePolygon }
+                    currentModel
+
+                _ ->
+                    currentModel
+    in
+        ( newModel, Cmd.none )
 
 
 addPoint : Array Point -> Array Point

@@ -2,6 +2,7 @@ module Types exposing (..)
 
 import Array exposing (Array)
 import Html exposing (Html)
+import Mouse
 
 
 {-| Simplified pyramid definition, so that the
@@ -19,9 +20,14 @@ type Msg
     = NewPoint
     | RemovePoint
     | ChangeCoordinate Int Axis String
-    | DragStart Point
-    | DragAt Point
-    | DragEnd Point
+    | Random
+    | MouseMsg Mouse.Position
+
+
+
+-- | DragStart Point
+-- | DragAt Point
+-- | DragEnd Point
 
 
 type alias Pyramid =
