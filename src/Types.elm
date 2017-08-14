@@ -19,7 +19,7 @@ type alias Model =
 type Msg
     = NewPoint
     | RemovePoint
-    | ChangeCoordinate Int Axis String
+    | ChangePoint Point Int
     | Random
     | MouseMsg Mouse.Position
 
@@ -49,9 +49,12 @@ type alias Point =
     }
 
 
-type Axis
-    = X
-    | Y
+type alias PointChanger =
+    { newCoordinates : Point
+    , index : Int
+    , fieldX : Html Msg
+    , fieldY : Html Msg
+    }
 
 
 type alias PointInput =

@@ -30,7 +30,7 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 
 - [x] generalize pyramid base shape, re-work types.
 - [x] use arrays, cleanup everything.
-- [ ] make ChangePoint message type simpler: pass `index` and `newCoordinates` instead of `index`, `axis` and `newValue`.
+- [x] make ChangePoint message type simpler: pass `index` and new `Point` instead of `index`, `axis` and `newValue`.
 - [ ] always sort array of points by vector angle. (avoids certain nonsensical shapes).
 - [ ] make pyramid tip changeable too, possibly re-work Pyramid type.
 
