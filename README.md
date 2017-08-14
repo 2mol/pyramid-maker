@@ -4,7 +4,7 @@ Interactive tool to create climbing volumes and calculate the necessary angles a
 
 Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), but meant to allow arbitrary (convex?) polygons as a base.
 
-# Todo:
+## Todo:
 
 ### features, ui, interactivity
 
@@ -21,7 +21,7 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 
 ### math
 
-- [ ] transform 2D Points into 3D.
+- [ ] new Point3D type, conversion function for pyramid base-polygon + tip into 3D. Rename `Point` to `Point2D`.
 - [ ] list of faces/triangles, make sure orientation is consistent.
 - [ ] **calculate angles**.
 - [ ] generate **random** shapes.
