@@ -10,10 +10,9 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 
 - [x] basic framework, rough visualization.
 - [x] add input boxes for coordinates.
-- [ ] label points.
 - [ ] presets for some basic shapes that work well.
 - [ ] mouse interactions, dragging of corners.
-- [ ] annotate visualization with angles and lengths. Toggle button.
+- [ ] annotatations for angles and lengths. On/off toggle button.
 - [ ] cut list, calculate m<sup>2</sup> of material required.
 - [ ] units!
 - [ ] build instructions in README.
