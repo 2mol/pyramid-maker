@@ -14,8 +14,7 @@ import InputFields as I
 view : Model -> Html Msg
 view { pyramid, drag } =
     let
-        -- title =
-        --     D.drawTitle "Pyramid Maker"
+        -- input stuff:
         coordinateFields =
             I.pointsToInputs pyramid.basePolygon
 
@@ -25,17 +24,22 @@ view { pyramid, drag } =
         inputColumn =
             D.wrapInputColumn inputs "Pyramid Maker"
 
+        -- drawing stuff:
+        pyramidDrawing =
+            D.drawPyramid pyramid Top
+
         annotationsDrawing =
-            []
+            Svg.g [] []
 
         borderDrawing =
-            []
+            D.border
 
         drawing =
             Svg.svg D.canvas <|
-                (D.drawPyramid pyramid Top)
-                    ++ annotationsDrawing
-                    ++ [ D.border ]
+                [ pyramidDrawing
+                , annotationsDrawing
+                , borderDrawing
+                ]
     in
         Html.table []
             [ Html.tr []

@@ -53,7 +53,7 @@ canvas =
     (,)
 
 
-drawPyramid : Pyramid -> ViewPoint -> List (Svg Msg)
+drawPyramid : Pyramid -> ViewPoint -> Svg Msg
 drawPyramid ({ basePolygon, top, height } as pyramid) vp =
     case vp of
         Top ->
@@ -61,13 +61,19 @@ drawPyramid ({ basePolygon, top, height } as pyramid) vp =
                 edges =
                     Array.toList <| pyramidToEdges pyramid
 
-                pyramidLines =
-                    List.map drawEdge edges
+                drawnEdges =
+                    Svg.g [] <| List.map drawEdge edges
 
-                pyramidPoints =
-                    drawPyramidPoints pyramid
+                drawnPoints =
+                    -- Svg.g [ SvgA.filter "url(#fafa)", SvgA.fillOpacity ".5" ] <| drawPyramidPoints pyramid
+                    Svg.g [] <| drawPyramidPoints pyramid
             in
-                pyramidLines ++ pyramidPoints
+                Svg.g []
+                    [ drawnEdges
+                    , drawnPoints
+
+                    -- , Svg.filter [ SvgA.id "fafa" ] [ Svg.feBlend [ SvgA.mode "lighten" ] [] ]
+                    ]
 
 
 drawEdge : Edge -> Svg Msg
@@ -80,7 +86,7 @@ drawEdge { start, end } =
             List.map2 (<|) [ SvgA.x1, SvgA.x2, SvgA.y1, SvgA.y2 ] lineCoord
 
         lineParameters =
-            [ SvgA.stroke "black", SvgA.strokeWidth "0.5" ]
+            [ SvgA.stroke "black", SvgA.strokeWidth "0.5", SvgA.result "edges" ]
     in
         Svg.line (svgLineCoord ++ lineParameters) []
 
