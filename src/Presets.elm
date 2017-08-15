@@ -28,18 +28,14 @@ whateverPyramid =
 --
 
 
-easyPeasy_ : Array Point
-easyPeasy_ =
-    Array.fromList
-        [ Point 50 50
-        , Point 100 300
-        , Point 300 400
-        ]
-
-
 easyPeasy : Pyramid
 easyPeasy =
     Pyramid
-        easyPeasy_
-        (Point 10 10)
-        10
+        (Array.fromList
+            [ Point 50 40
+            , Point 50 360
+            , Point 560 200
+            ]
+        )
+        (Point 120 200)
+        666

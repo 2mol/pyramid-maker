@@ -41,7 +41,7 @@ canvas =
                 |> List.map toString
                 |> String.join " "
     in
-        [ SvgA.viewBox canvasString, SvgA.width "600px" ]
+        [ SvgA.viewBox canvasString, SvgA.width canvasSize.pixels ]
 
 
 
