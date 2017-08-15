@@ -36,4 +36,5 @@ subscriptions model =
             Sub.none
 
         Just _ ->
-            Sub.batch [ Mouse.moves (DragAt 1), Mouse.ups (DragEnd 1) ]
+            --, Mouse.ups DragEnd ]
+            Sub.batch [ Mouse.moves (DragAt 1) ]

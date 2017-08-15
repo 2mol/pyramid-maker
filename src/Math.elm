@@ -5,15 +5,15 @@ import Array exposing (Array)
 
 
 pyramidToEdges : Pyramid -> Array Edge
-pyramidToEdges { basePolygon, top, height } =
+pyramidToEdges { basePolygon, tip, height } =
     let
         ridges =
-            Array.map (Edge top) basePolygon
+            Array.map (Edge tip) basePolygon
 
         sortedBasePolygon =
             basePolygon
                 |> Array.toList
-                |> List.sortWith (compareAngle top)
+                |> List.sortWith (compareAngle tip)
                 |> Array.fromList
 
         perimeter =
@@ -65,7 +65,7 @@ perimeterScanner nextPoint lastEdge =
 --         sortedBasePolygon =
 --             pyramid.basePolygon
 --                 |> Array.toList
---                 |> List.sortWith (compareAngle pyramid.top)
+--                 |> List.sortWith (compareAngle pyramid.tip)
 --                 |> Array.fromList
 --     in
 --         { pyramid | basePolygon = sortedBasePolygon }

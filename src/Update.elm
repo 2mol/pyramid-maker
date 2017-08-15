@@ -16,8 +16,16 @@ update msg model =
 updateHelper : Msg -> Model -> Model
 updateHelper msg ({ pyramid, drag } as model) =
     let
-        { basePolygon, top, height } =
+        { basePolygon, tip, height } =
             pyramid
+
+        newTip =
+            case msg of
+                Change (ChangeTip updatedPoint) ->
+                    updatedPoint
+
+                _ ->
+                    tip
 
         newBasePolygon =
             case msg of
@@ -30,11 +38,8 @@ updateHelper msg ({ pyramid, drag } as model) =
                 RemovePoint ->
                     Array.slice 0 -1 basePolygon
 
-                ChangePoint index updatedPoint ->
+                Change (ChangePolygonPoint index updatedPoint) ->
                     Array.set index updatedPoint basePolygon
-
-                DragEnd index xy ->
-                    (getPosition model index).basePolygon
 
                 _ ->
                     basePolygon
@@ -46,7 +51,7 @@ updateHelper msg ({ pyramid, drag } as model) =
         -- DragEnd index position ->
         --     basePolygon
         newPyramid =
-            { pyramid | basePolygon = newBasePolygon }
+            { pyramid | basePolygon = newBasePolygon, tip = newTip }
 
         newDrag =
             case msg of
@@ -56,7 +61,7 @@ updateHelper msg ({ pyramid, drag } as model) =
                 DragAt index xy ->
                     Maybe.map (\{ start } -> Drag start xy) drag
 
-                DragEnd index xy ->
+                DragEnd ->
                     Nothing
 
                 _ ->
@@ -84,7 +89,7 @@ getPosition { pyramid, drag } index =
                                 (point.y + (toFloat <| current.y - start.y))
 
                         Nothing ->
-                            pyramid.top
+                            pyramid.tip
             in
                 { pyramid | basePolygon = Array.set index newPoint pyramid.basePolygon }
 

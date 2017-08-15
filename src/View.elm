@@ -16,7 +16,7 @@ view { pyramid, drag } =
     let
         -- input stuff:
         coordinateFields =
-            I.pointsToInputs pyramid.basePolygon
+            I.pointsToInputs pyramid
 
         inputs =
             I.randomButton :: I.addRemoveButtons :: coordinateFields

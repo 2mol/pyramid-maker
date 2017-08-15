@@ -54,7 +54,7 @@ canvas =
 
 
 drawPyramid : Pyramid -> ViewPoint -> Svg Msg
-drawPyramid ({ basePolygon, top, height } as pyramid) vp =
+drawPyramid ({ basePolygon, tip, height } as pyramid) vp =
     case vp of
         Top ->
             let
@@ -109,15 +109,15 @@ drawPoint color index { x, y } =
 
 
 drawPyramidPoints : Pyramid -> List (Svg Msg)
-drawPyramidPoints { basePolygon, top, height } =
+drawPyramidPoints { basePolygon, tip, height } =
     let
         polygonPoints =
             Array.toList <| Array.indexedMap (drawPoint "none") basePolygon
 
-        topPoint =
-            drawPoint "#dd0000" 99 top
+        tipPoint =
+            drawPoint "#dd0000" 99 tip
     in
-        topPoint :: polygonPoints
+        tipPoint :: polygonPoints
 
 
 

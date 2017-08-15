@@ -20,11 +20,16 @@ type alias Model =
 type Msg
     = NewPoint
     | RemovePoint
-    | ChangePoint Int Point
+    | Change ChangePyramidPoint
     | Random
     | DragStart Int Position
     | DragAt Int Position
-    | DragEnd Int Position
+    | DragEnd
+
+
+type ChangePyramidPoint
+    = ChangePolygonPoint Int Point
+    | ChangeTip Point
 
 
 type alias Drag =
@@ -39,7 +44,7 @@ type alias Drag =
 
 type alias Pyramid =
     { basePolygon : Array Point
-    , top : Point
+    , tip : Point
     , height : Float
     }
 
@@ -54,3 +59,8 @@ type alias Point =
     { x : Float
     , y : Float
     }
+
+
+type Axis
+    = X
+    | Y

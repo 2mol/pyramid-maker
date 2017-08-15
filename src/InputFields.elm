@@ -16,67 +16,51 @@ import Config exposing (canvasSize)
 -- Input Fields:
 
 
-pointsToInputs : Array Point -> List (Html Msg)
-pointsToInputs points =
+pointsToInputs : Pyramid -> List (Html Msg)
+pointsToInputs { basePolygon, tip, height } =
     let
-        pointInputs =
-            Array.indexedMap mkInputPair points
-
-        -- axisSelector =
-        --     \axis -> Array.toList <| Array.map .field <| Array.map axis pointInputs
-        xInputs =
-            Array.toList <| Array.map Tuple.first pointInputs
-
-        yInputs =
-            Array.toList <| Array.map Tuple.second pointInputs
-
-        breaks =
-            List.repeat (Array.length pointInputs) (Html.br [] [])
+        polygonInputs =
+            Array.toList <| Array.indexedMap mkInputPair basePolygon
     in
-        List.concat <| List.map3 concat3elements xInputs yInputs breaks
+        (mkInputPair -1 tip) :: polygonInputs
 
 
-concat3elements : a -> a -> a -> List a
-concat3elements a b c =
-    [ a, b, c ]
+mkInputPair : Int -> Point -> Html Msg
+mkInputPair index point =
+    Html.div []
+        [ inputField X index point
+        , inputField Y index point
+        , Html.br [] []
+        ]
 
 
-mkInputPair : Int -> Point -> ( Html Msg, Html Msg )
-mkInputPair index p =
+inputField : Axis -> Int -> Point -> Html Msg
+inputField axis index point =
     let
-        inputFieldX =
-            Html.input
-                [ HtmlA.type_ "number"
-                , HtmlA.step "any"
-                , HtmlA.style
-                    [ ( "width", "80px" )
-                    ]
+        ( value, maxValue, onInputEvent ) =
+            case axis of
+                X ->
+                    ( point.x, canvasSize.x, onInput (\s -> changePoint s "" point index) )
 
-                -- , HtmlA.placeholder <| toString i
-                -- , HtmlA.disabled True
-                --, HtmlA.name "quantity"
-                , HtmlA.min "0"
-                , HtmlA.max <| toString <| .x canvasSize
-                , HtmlA.defaultValue <| toString <| .x p
-                , onInput (\s -> changePoint s "" p index)
-                ]
-                []
-
-        inputFieldY =
-            Html.input
-                [ HtmlA.type_ "number"
-                , HtmlA.step "any"
-                , HtmlA.style
-                    [ ( "width", "80px" )
-                    ]
-                , HtmlA.min "0"
-                , HtmlA.max <| toString <| .y canvasSize
-                , HtmlA.defaultValue <| toString <| .y p
-                , onInput (\s -> changePoint "" s p index)
-                ]
-                []
+                Y ->
+                    ( point.y, canvasSize.y, onInput (\s -> changePoint "" s point index) )
     in
-        ( inputFieldX, inputFieldY )
+        Html.input
+            [ HtmlA.type_ "number"
+            , HtmlA.step "any"
+            , HtmlA.style
+                [ ( "width", "80px" )
+                ]
+
+            -- , HtmlA.placeholder <| toString i
+            -- , HtmlA.disabled True
+            --, HtmlA.name "quantity"
+            , HtmlA.min "0"
+            , HtmlA.max <| toString <| maxValue
+            , HtmlA.defaultValue <| toString <| value
+            , onInputEvent
+            ]
+            []
 
 
 changePoint : String -> String -> Point -> Int -> Msg
@@ -98,7 +82,10 @@ changePoint xString yString oldPoint index =
                 _ ->
                     oldPoint.y
     in
-        ChangePoint index { oldPoint | x = newx, y = newy }
+        if index >= 0 then
+            Change (ChangePolygonPoint index { oldPoint | x = newx, y = newy })
+        else
+            Change (ChangeTip { oldPoint | x = newx, y = newy })
 
 
 
