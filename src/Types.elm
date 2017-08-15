@@ -1,7 +1,7 @@
 module Types exposing (..)
 
 import Array exposing (Array)
-import Mouse
+import Mouse exposing (Position)
 
 
 {-| Simplified pyramid definition, so that the
@@ -12,21 +12,29 @@ unambiguous triangular sides.
 
 -}
 type alias Model =
-    Pyramid
+    { pyramid : Pyramid
+    , drag : Maybe Drag
+    }
 
 
 type Msg
     = NewPoint
     | RemovePoint
-    | ChangePoint Point Int
+    | ChangePoint Int Point
     | Random
-    | MouseMsg Mouse.Position
+    | DragStart Int Position
+    | DragAt Int Position
+    | DragEnd Int Position
+
+
+type alias Drag =
+    { start : Position
+    , current : Position
+    }
 
 
 
--- | DragStart Point
--- | DragAt Point
--- | DragEnd Point
+-- Shapes:
 
 
 type alias Pyramid =

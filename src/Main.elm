@@ -5,7 +5,7 @@ module Main exposing (main)
 -}
 
 import Html
-import Mouse
+import Mouse exposing (Position)
 import Types exposing (..)
 import Update exposing (update)
 import View exposing (view)
@@ -26,21 +26,14 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( Presets.whateverPyramid, Cmd.none )
+    ( Model Presets.whateverPyramid Nothing, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.batch
-        [ Mouse.clicks MouseMsg
-        ]
+    case model.drag of
+        Nothing ->
+            Sub.none
 
-
-
--- subscriptions : Model -> Sub Msg
--- subscriptions model =
---     case model.drag of
---         Nothing ->
---             Sub.none
---         Just _ ->
---             Sub.batch [ Mouse.moves DragAt, Mouse.ups DragEnd ]
+        Just _ ->
+            Sub.batch [ Mouse.moves (DragAt 1), Mouse.ups (DragEnd 1) ]

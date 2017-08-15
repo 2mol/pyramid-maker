@@ -12,7 +12,7 @@ import InputFields as I
 
 
 view : Model -> Html Msg
-view pyramid =
+view { pyramid, drag } =
     let
         -- title =
         --     D.drawTitle "Pyramid Maker"

@@ -98,7 +98,7 @@ changePoint xString yString oldPoint index =
                 _ ->
                     oldPoint.y
     in
-        ChangePoint { oldPoint | x = newx, y = newy } index
+        ChangePoint index { oldPoint | x = newx, y = newy }
 
 
 

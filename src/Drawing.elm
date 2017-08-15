@@ -21,8 +21,11 @@ module Drawing exposing (..)
 
 import Html exposing (Html)
 import Html.Attributes as HtmlA
+import Html.Events as HtmlE
 import Svg exposing (Svg)
 import Svg.Attributes as SvgA
+import Mouse
+import Json.Decode as Decode
 import Array exposing (Array)
 import Types exposing (..)
 import Config exposing (..)
@@ -45,6 +48,11 @@ canvas =
 -- Drawing the Pyramid:
 
 
+(=>) : a -> b -> ( a, b )
+(=>) =
+    (,)
+
+
 drawPyramid : Pyramid -> ViewPoint -> List (Svg Msg)
 drawPyramid ({ basePolygon, top, height } as pyramid) vp =
     case vp of
@@ -56,17 +64,10 @@ drawPyramid ({ basePolygon, top, height } as pyramid) vp =
                 pyramidLines =
                     List.map drawEdge edges
 
-                topCircle =
-                    Svg.circle
-                        [ SvgA.cx <| toString top.x
-                        , SvgA.cy <| toString top.y
-                        , SvgA.r "3"
-                        , SvgA.fill "none"
-                        , SvgA.stroke "#dd0000"
-                        ]
-                        []
+                pyramidPoints =
+                    drawPyramidPoints pyramid
             in
-                topCircle :: pyramidLines
+                pyramidLines ++ pyramidPoints
 
 
 drawEdge : Edge -> Svg Msg
@@ -82,6 +83,35 @@ drawEdge { start, end } =
             [ SvgA.stroke "black", SvgA.strokeWidth "0.5" ]
     in
         Svg.line (svgLineCoord ++ lineParameters) []
+
+
+drawPoint : String -> Int -> Point -> Svg Msg
+drawPoint color index { x, y } =
+    Svg.circle
+        [ HtmlE.on "mousedown" (Decode.map (DragStart index) Mouse.position)
+        , SvgA.cx <| toString x
+        , SvgA.cy <| toString y
+        , SvgA.r "8"
+        , SvgA.fill "none"
+        , SvgA.stroke color
+        , HtmlA.style
+            [ "cursor" => "move"
+            , "pointer-events" => "visible"
+            ]
+        ]
+        []
+
+
+drawPyramidPoints : Pyramid -> List (Svg Msg)
+drawPyramidPoints { basePolygon, top, height } =
+    let
+        polygonPoints =
+            Array.toList <| Array.indexedMap (drawPoint "none") basePolygon
+
+        topPoint =
+            drawPoint "#dd0000" 99 top
+    in
+        topPoint :: polygonPoints
 
 
 
