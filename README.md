@@ -11,7 +11,7 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 - [x] basic framework, rough visualization.
 - [x] add input boxes for coordinates.
 - [ ] presets for some basic shapes that work well.
-- [ ] mouse interactions, dragging of corners.
+- [x] mouse interactions, dragging of corners.
 - [ ] annotatations for angles and lengths. On/off toggle button.
 - [ ] cut list, calculate m<sup>2</sup> of material required.
 - [ ] units!
@@ -32,7 +32,7 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 - [x] use arrays, cleanup everything.
 - [x] make ChangePoint message type simpler: pass `index` and new `Point` instead of `index`, `axis` and `newValue`.
 - [x] always draw edges in order of vector angle. (avoids certain nonsensical shapes).
-- [ ] make pyramid tip changeable too, possibly re-work Pyramid type.
+- [x] make pyramid tip changeable too, possibly re-work Pyramid type.
 
 ### stretch goals
 

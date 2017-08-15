@@ -5,10 +5,10 @@ module Main exposing (main)
 -}
 
 import Html
-import Mouse exposing (Position)
 import Types exposing (..)
-import Update exposing (update)
-import View exposing (view)
+import Update
+import View
+import Subscriptions
 import Presets
 
 
@@ -18,23 +18,12 @@ main : Program Never Model Msg
 main =
     Html.program
         { init = init
-        , view = view
-        , update = update
-        , subscriptions = subscriptions
+        , view = View.view
+        , update = Update.update
+        , subscriptions = Subscriptions.subscriptions
         }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model Presets.whateverPyramid Nothing, Cmd.none )
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    case model.drag of
-        Nothing ->
-            Sub.none
-
-        Just _ ->
-            --, Mouse.ups DragEnd ]
-            Sub.batch [ Mouse.moves (DragAt 1) ]
+    ( Model Presets.whateverPyramid Nothing Nothing, Cmd.none )

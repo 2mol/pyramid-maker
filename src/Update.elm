@@ -1,7 +1,8 @@
-module Update exposing (..)
+module Update exposing (update, getLivePyramid)
 
 import Array exposing (Array)
 import Types exposing (..)
+import Math exposing (..)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -14,7 +15,7 @@ update msg model =
 
 
 updateHelper : Msg -> Model -> Model
-updateHelper msg ({ pyramid, drag } as model) =
+updateHelper msg ({ pyramid, drag, currentIndex } as model) =
     let
         { basePolygon, tip, height } =
             pyramid
@@ -51,7 +52,12 @@ updateHelper msg ({ pyramid, drag } as model) =
         -- DragEnd index position ->
         --     basePolygon
         newPyramid =
-            { pyramid | basePolygon = newBasePolygon, tip = newTip }
+            case msg of
+                DragEnd index xy ->
+                    getLivePyramid model
+
+                _ ->
+                    { pyramid | basePolygon = newBasePolygon, tip = newTip }
 
         newDrag =
             case msg of
@@ -61,57 +67,50 @@ updateHelper msg ({ pyramid, drag } as model) =
                 DragAt index xy ->
                     Maybe.map (\{ start } -> Drag start xy) drag
 
-                DragEnd ->
+                DragEnd _ _ ->
                     Nothing
 
                 _ ->
                     Nothing
+
+        newCurrentIndex =
+            case msg of
+                DragStart index _ ->
+                    Just index
+
+                DragAt index _ ->
+                    Just index
+
+                _ ->
+                    Nothing
     in
-        { model | pyramid = newPyramid, drag = newDrag }
+        { model | pyramid = newPyramid, drag = newDrag, currentIndex = newCurrentIndex }
 
 
-getPosition : Model -> Int -> Pyramid
-getPosition { pyramid, drag } index =
-    case drag of
-        Nothing ->
-            pyramid
-
-        Just { start, current } ->
+getLivePyramid : Model -> Pyramid
+getLivePyramid { pyramid, drag, currentIndex } =
+    case ( drag, currentIndex ) of
+        ( Just { start, current }, Just index ) ->
             let
-                mPoint =
+                currentPoint =
                     Array.get index pyramid.basePolygon
 
-                newPoint =
-                    case mPoint of
+                draggedPoint =
+                    case currentPoint of
                         Just point ->
                             Point
                                 (point.x + (toFloat <| current.x - start.x))
                                 (point.y + (toFloat <| current.y - start.y))
 
                         Nothing ->
-                            pyramid.tip
+                            Point
+                                (pyramid.tip.x + (toFloat <| current.x - start.x))
+                                (pyramid.tip.y + (toFloat <| current.y - start.y))
             in
-                { pyramid | basePolygon = Array.set index newPoint pyramid.basePolygon }
+                if index >= 0 then
+                    { pyramid | basePolygon = Array.set index draggedPoint pyramid.basePolygon }
+                else
+                    { pyramid | tip = draggedPoint }
 
-
-
--- more helper functions:
-
-
-addPoint : Array Point -> Array Point
-addPoint basePolygon =
-    let
-        newPoint =
-            case ( Array.get 0 basePolygon, lastElem basePolygon ) of
-                ( Just p0, Just pn ) ->
-                    Point ((p0.x + pn.x) / 2) ((p0.y + pn.y) / 2)
-
-                _ ->
-                    Point 20 20
-    in
-        Array.push newPoint basePolygon
-
-
-lastElem : Array a -> Maybe a
-lastElem =
-    Array.foldl (Just >> always) Nothing
+        _ ->
+            pyramid

@@ -1,11 +1,19 @@
-module Math exposing (pyramidToEdges)
+module Math
+    exposing
+        ( pyramidToEdges
+        , lastElem
+        , addPoint
+        )
 
 import Types exposing (..)
 import Array exposing (Array)
 
 
+-- getting edges from a pyramid:
+
+
 pyramidToEdges : Pyramid -> Array Edge
-pyramidToEdges { basePolygon, tip, height } =
+pyramidToEdges { basePolygon, tip } =
     let
         ridges =
             Array.map (Edge tip) basePolygon
@@ -43,11 +51,6 @@ polygonToEdges p =
                 Array.empty
 
 
-lastElem : Array a -> Maybe a
-lastElem =
-    Array.foldl (Just >> always) Nothing
-
-
 perimeterScanner : Point -> Edge -> Edge
 perimeterScanner nextPoint lastEdge =
     let
@@ -58,17 +61,16 @@ perimeterScanner nextPoint lastEdge =
 
 
 
---
--- sortPyramidByAngle : Pyramid -> Pyramid
--- sortPyramidByAngle pyramid =
---     let
---         sortedBasePolygon =
---             pyramid.basePolygon
---                 |> Array.toList
---                 |> List.sortWith (compareAngle pyramid.tip)
---                 |> Array.fromList
---     in
---         { pyramid | basePolygon = sortedBasePolygon }
+-- because Array is lacking:
+
+
+lastElem : Array a -> Maybe a
+lastElem =
+    Array.foldl (Just >> always) Nothing
+
+
+
+-- sort vectors/points by angle:
 
 
 compareAngle : Point -> Point -> Point -> Order
@@ -95,3 +97,25 @@ edgeAngle p1 p2 =
             angle
         else
             -1 * angle
+
+
+
+-- add a point to an array in a hopefully clever way in the future:
+
+
+addPoint : Array Point -> Array Point
+addPoint basePolygon =
+    let
+        newPoint =
+            case ( Array.get 0 basePolygon, lastElem basePolygon ) of
+                ( Just p0, Just pn ) ->
+                    Point ((p0.x + pn.x) / 2) ((p0.y + pn.y) / 2)
+
+                _ ->
+                    Point 20 20
+    in
+        Array.push newPoint basePolygon
+
+
+
+--

@@ -13,6 +13,7 @@ unambiguous triangular sides.
 -}
 type alias Model =
     { pyramid : Pyramid
+    , currentIndex : Maybe Int
     , drag : Maybe Drag
     }
 
@@ -24,7 +25,7 @@ type Msg
     | Random
     | DragStart Int Position
     | DragAt Int Position
-    | DragEnd
+    | DragEnd Int Position
 
 
 type ChangePyramidPoint

@@ -109,13 +109,13 @@ drawPoint color index { x, y } =
 
 
 drawPyramidPoints : Pyramid -> List (Svg Msg)
-drawPyramidPoints { basePolygon, tip, height } =
+drawPyramidPoints { basePolygon, tip } =
     let
         polygonPoints =
             Array.toList <| Array.indexedMap (drawPoint "none") basePolygon
 
         tipPoint =
-            drawPoint "#dd0000" 99 tip
+            drawPoint "#dd0000" -1 tip
     in
         tipPoint :: polygonPoints
 

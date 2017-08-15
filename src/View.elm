@@ -1,4 +1,4 @@
-module View exposing (..)
+module View exposing (view)
 
 {-| Should just chain Drawing functions together
 -}
@@ -9,14 +9,27 @@ import Types exposing (..)
 import Drawing as D
 import Perspective exposing (ViewPoint(..))
 import InputFields as I
+import Update as U
 
 
 view : Model -> Html Msg
-view { pyramid, drag } =
+view ({ pyramid, drag } as model) =
     let
+        -- drawing stuff:
+        livePyramid =
+            case drag of
+                Nothing ->
+                    pyramid
+
+                Just xy ->
+                    U.getLivePyramid model
+
+        pyramidDrawing =
+            D.drawPyramid livePyramid Top
+
         -- input stuff:
         coordinateFields =
-            I.pointsToInputs pyramid
+            I.pointsToInputs livePyramid
 
         inputs =
             I.randomButton :: I.addRemoveButtons :: coordinateFields
@@ -24,16 +37,14 @@ view { pyramid, drag } =
         inputColumn =
             D.wrapInputColumn inputs "Pyramid Maker"
 
-        -- drawing stuff:
-        pyramidDrawing =
-            D.drawPyramid pyramid Top
-
+        -- other layers:
         annotationsDrawing =
             Svg.g [] []
 
         borderDrawing =
             D.border
 
+        -- all together now:
         drawing =
             Svg.svg D.canvas <|
                 [ pyramidDrawing
