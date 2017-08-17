@@ -1,8 +1,10 @@
 # Pyramid Maker
 
-Interactive tool to create climbing volumes and calculate the necessary angles at which to cut the plyboard.
+Interactive tool to create pyramid-shaped climbing volumes and calculate the necessary angles at which to cut the plyboard.
 
-Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), but meant to allow arbitrary (convex?) polygons as a base.
+Use it at [https://talhoffer.github.io/pyramid-maker/](https://talhoffer.github.io/pyramid-maker/).
+
+Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), but meant to allow arbitrary polygons as a base.
 
 ## Todo:
 
@@ -33,6 +35,7 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 - [x] make ChangePoint message type simpler: pass `index` and new `Point` instead of `index`, `axis` and `newValue`.
 - [x] always draw edges in order of vector angle. (avoids certain nonsensical shapes).
 - [x] make pyramid tip changeable too, possibly re-work Pyramid type.
+- [ ] simplify how mouse action messages change the pyramid part of the model.
 
 ### stretch goals
 
