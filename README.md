@@ -17,6 +17,8 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 - [ ] annotatations for angles and lengths. On/off toggle button.
 - [ ] cut list, calculate m<sup>2</sup> of material required.
 - [ ] units!
+- [ ] buttons to scale up or down.
+- [ ] fields for each edge, ability to directly set length of an edge.
 - [ ] build instructions in README.
 - [ ] hole placement for T-Nuts.
 
