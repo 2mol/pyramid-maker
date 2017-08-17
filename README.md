@@ -1,6 +1,6 @@
 # Pyramid Maker
 
-Interactive tool to create pyramid-shaped climbing volumes and calculate the necessary angles at which to cut the plyboard.
+Interactive tool to create pyramid-shaped climbing volumes and calculate the necessary angles at which to cut your material.
 
 Use it at [https://talhoffer.github.io/pyramid-maker/](https://talhoffer.github.io/pyramid-maker/).
 
