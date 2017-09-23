@@ -12,52 +12,40 @@ import Array exposing (Array)
 -- getting edges from a pyramid:
 
 
-pyramidToEdges : Pyramid -> Array Edge
+pyramidToEdges : Pyramid -> List Edge
 pyramidToEdges { basePolygon, tip } =
     let
         ridges =
-            Array.map (Edge tip) basePolygon
-
-        sortedBasePolygon =
             basePolygon
                 |> Array.toList
-                |> List.sortWith (compareAngle tip)
-                |> Array.fromList
+                |> List.map (Edge tip)
 
+        -- Array.toList <| Array.map (Edge tip) basePolygon
         perimeter =
-            polygonToEdges sortedBasePolygon
+            basePolygon
+                |> Array.toList
+                |> polygonToEdges tip
     in
-        Array.append ridges perimeter
+        ridges ++ perimeter
 
 
-polygonToEdges : Array Point -> Array Edge
-polygonToEdges p =
+polygonToEdges : Point -> List Point -> List Edge
+polygonToEdges tip polygon =
     let
-        pList =
-            Array.toList p
-
-        maybeLastPoint =
-            lastElem p
+        orderedPolygon =
+            polygon |> List.sortWith (compareAngle tip)
     in
-        case maybeLastPoint of
-            Just lastPoint ->
-                let
-                    lastEdge =
-                        Edge lastPoint lastPoint
-                in
-                    Array.fromList <| List.scanl perimeterScanner lastEdge pList
+        case orderedPolygon of
+            x1 :: x2 :: xs ->
+                List.scanl perimeterScanner (Edge x1 x2) (xs ++ [ x1 ])
 
             _ ->
-                Array.empty
+                []
 
 
 perimeterScanner : Point -> Edge -> Edge
-perimeterScanner nextPoint lastEdge =
-    let
-        { start, end } =
-            lastEdge
-    in
-        Edge end nextPoint
+perimeterScanner nextPoint { end } =
+    Edge end nextPoint
 
 
 
@@ -115,7 +103,3 @@ addPoint basePolygon =
                     Point 20 20
     in
         Array.push newPoint basePolygon
-
-
-
---

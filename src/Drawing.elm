@@ -59,7 +59,7 @@ drawPyramid ({ basePolygon, tip, height } as pyramid) vp =
         Top ->
             let
                 edges =
-                    Array.toList <| pyramidToEdges pyramid
+                    pyramidToEdges pyramid
 
                 drawnEdges =
                     Svg.g [] <| List.map drawEdge edges
@@ -67,10 +67,17 @@ drawPyramid ({ basePolygon, tip, height } as pyramid) vp =
                 drawnPoints =
                     -- Svg.g [ SvgA.filter "url(#fafa)", SvgA.fillOpacity ".5" ] <| drawPyramidPoints pyramid
                     Svg.g [] <| drawPyramidPoints pyramid
+
+                edgeLabels =
+                    List.map toString <| List.range 1 <| List.length edges
+
+                drawnLabels =
+                    Svg.g [] <| List.map2 edgeAnnotation edgeLabels edges
             in
                 Svg.g []
                     [ drawnEdges
                     , drawnPoints
+                    , drawnLabels
 
                     -- , Svg.filter [ SvgA.id "fafa" ] [ Svg.feBlend [ SvgA.mode "lighten" ] [] ]
                     ]
@@ -184,7 +191,7 @@ edgeAnnotation label edge =
             [ SvgA.x <| toString <| pos.x
             , SvgA.y <| toString <| pos.y
             , SvgA.fontFamily "sans-serif"
-            , SvgA.fontSize "4"
+            , SvgA.fontSize "14"
             ]
             [ Svg.text label ]
 

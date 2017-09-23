@@ -38,9 +38,6 @@ view ({ pyramid, drag } as model) =
             D.wrapInputColumn inputs "Pyramid Maker"
 
         -- other layers:
-        annotationsDrawing =
-            Svg.g [] []
-
         borderDrawing =
             D.border
 
@@ -48,7 +45,6 @@ view ({ pyramid, drag } as model) =
         drawing =
             Svg.svg D.canvas <|
                 [ pyramidDrawing
-                , annotationsDrawing
                 , borderDrawing
                 ]
     in
