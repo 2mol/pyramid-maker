@@ -37,7 +37,10 @@ updateHelper msg ({ pyramid, drag, currentIndex } as model) =
                         basePolygon
 
                 RemovePoint ->
-                    Array.slice 0 -1 basePolygon
+                    if Array.length basePolygon > 3 then
+                        Array.slice 0 -1 basePolygon
+                    else
+                        basePolygon
 
                 Change (ChangePolygonPoint index updatedPoint) ->
                     Array.set index updatedPoint basePolygon
