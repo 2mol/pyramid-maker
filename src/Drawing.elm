@@ -166,13 +166,13 @@ drawTitle title =
 border : Svg.Svg msg
 border =
     Svg.rect
-        [ SvgA.x "2"
-        , SvgA.y "2"
-        , SvgA.width <| toString <| canvasSize.x - 3
-        , SvgA.height <| toString <| canvasSize.y - 3
+        [ SvgA.x "0"
+        , SvgA.y "0"
+        , SvgA.width <| toString <| canvasSize.x
+        , SvgA.height <| toString <| canvasSize.y
         , SvgA.fill "none"
         , SvgA.stroke grey
-        , SvgA.strokeWidth "1"
+        , SvgA.strokeWidth "10"
         ]
         []
 

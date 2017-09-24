@@ -50,6 +50,7 @@ updateHelper msg ({ pyramid, drag } as model) =
 
                 Random ->
                     basePolygon
+                        |> Array.map (\p -> randomPoint (seed + truncate p.x + truncate p.y))
 
                 _ ->
                     basePolygon

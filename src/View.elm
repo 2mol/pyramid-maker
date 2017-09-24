@@ -44,8 +44,8 @@ view ({ pyramid, drag } as model) =
         -- all together now:
         drawing =
             Svg.svg D.canvas <|
-                [ pyramidDrawing
-                , borderDrawing
+                [ borderDrawing
+                , pyramidDrawing
                 ]
     in
         Html.table []
