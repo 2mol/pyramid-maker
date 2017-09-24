@@ -7,6 +7,8 @@ module Math
 
 import Types exposing (..)
 import Array exposing (Array)
+import Random
+import Config as C exposing (..)
 
 
 -- getting edges from a pyramid:
@@ -91,15 +93,35 @@ edgeAngle p1 p2 =
 -- add a point to an array in a hopefully clever way in the future:
 
 
+randInt : Random.Generator Int
+randInt =
+    Random.int 1 100
+
+
+randomPoint : Random.Generator ( Int, Int )
+randomPoint =
+    let
+        cs =
+            C.canvasSize
+    in
+        Random.pair (Random.int 0 (truncate cs.x)) (Random.int 0 (truncate cs.y))
+
+
+coordAccum : Point -> Int -> Int
+coordAccum { x, y } acc =
+    acc + truncate x + truncate y
+
+
 addPoint : Array Point -> Array Point
 addPoint basePolygon =
     let
-        newPoint =
-            case ( Array.get 0 basePolygon, lastElem basePolygon ) of
-                ( Just p0, Just pn ) ->
-                    Point ((p0.x + pn.x) / 2) ((p0.y + pn.y) / 2)
+        seed =
+            Array.foldl coordAccum 0 basePolygon
 
-                _ ->
-                    Point 20 20
+        ( ( x, y ), _ ) =
+            Random.step randomPoint (Random.initialSeed seed)
+
+        newPoint =
+            Point (toFloat x) (toFloat y)
     in
         Array.push newPoint basePolygon

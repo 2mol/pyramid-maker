@@ -48,12 +48,6 @@ updateHelper msg ({ pyramid, drag, currentIndex } as model) =
                 _ ->
                     basePolygon
 
-        -- DragStart index xy ->
-        --     Array.set index position basePolygon
-        -- DragAt index position ->
-        --     basePolygon
-        -- DragEnd index position ->
-        --     basePolygon
         newPyramid =
             case msg of
                 DragEnd index xy ->
