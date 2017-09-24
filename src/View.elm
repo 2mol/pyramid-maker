@@ -21,7 +21,7 @@ view ({ pyramid, drag } as model) =
                 Nothing ->
                     pyramid
 
-                Just xy ->
+                Just _ ->
                     U.getLivePyramid model
 
         pyramidDrawing =

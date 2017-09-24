@@ -1,14 +1,13 @@
 module Math
     exposing
         ( pyramidToEdges
-        , lastElem
-        , addPoint
+        , randomPoint
         )
 
 import Types exposing (..)
-import Array exposing (Array)
+import Array
 import Random
-import Config as C exposing (..)
+import Config as C
 
 
 -- getting edges from a pyramid:
@@ -50,19 +49,6 @@ perimeterScanner nextPoint { end } =
     Edge end nextPoint
 
 
-
--- because Array is lacking:
-
-
-lastElem : Array a -> Maybe a
-lastElem =
-    Array.foldl (Just >> always) Nothing
-
-
-
--- sort vectors/points by angle:
-
-
 compareAngle : Point -> Point -> Point -> Order
 compareAngle p p1 p2 =
     compare (edgeAngle p p1) (edgeAngle p p2)
@@ -93,13 +79,8 @@ edgeAngle p1 p2 =
 -- add a point to an array in a hopefully clever way in the future:
 
 
-randInt : Random.Generator Int
-randInt =
-    Random.int 1 100
-
-
-randomPoint : Random.Generator ( Int, Int )
-randomPoint =
+randomPairGenerator : Random.Generator ( Int, Int )
+randomPairGenerator =
     let
         cs =
             C.canvasSize
@@ -107,21 +88,10 @@ randomPoint =
         Random.pair (Random.int 0 (truncate cs.x)) (Random.int 0 (truncate cs.y))
 
 
-coordAccum : Point -> Int -> Int
-coordAccum { x, y } acc =
-    acc + truncate x + truncate y
-
-
-addPoint : Array Point -> Array Point
-addPoint basePolygon =
+randomPoint : Int -> Point
+randomPoint seed =
     let
-        seed =
-            Array.foldl coordAccum 0 basePolygon
-
         ( ( x, y ), _ ) =
-            Random.step randomPoint (Random.initialSeed seed)
-
-        newPoint =
-            Point (toFloat x) (toFloat y)
+            Random.step randomPairGenerator (Random.initialSeed seed)
     in
-        Array.push newPoint basePolygon
+        Point (toFloat x) (toFloat y)

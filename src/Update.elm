@@ -1,6 +1,6 @@
 module Update exposing (update, getLivePyramid)
 
-import Array exposing (Array)
+import Array
 import Types exposing (..)
 import Math exposing (..)
 
@@ -15,10 +15,13 @@ update msg model =
 
 
 updateHelper : Msg -> Model -> Model
-updateHelper msg ({ pyramid, drag, currentIndex } as model) =
+updateHelper msg ({ pyramid, drag } as model) =
     let
-        { basePolygon, tip, height } =
+        { basePolygon, tip } =
             pyramid
+
+        seed =
+            Array.foldl coordAccum 0 basePolygon
 
         newTip =
             case msg of
@@ -32,7 +35,7 @@ updateHelper msg ({ pyramid, drag, currentIndex } as model) =
             case msg of
                 NewPoint ->
                     if Array.length basePolygon < 12 then
-                        addPoint basePolygon
+                        Array.push (randomPoint seed) basePolygon
                     else
                         basePolygon
 
@@ -45,12 +48,15 @@ updateHelper msg ({ pyramid, drag, currentIndex } as model) =
                 Change (ChangePolygonPoint index updatedPoint) ->
                     Array.set index updatedPoint basePolygon
 
+                Random ->
+                    basePolygon
+
                 _ ->
                     basePolygon
 
         newPyramid =
             case msg of
-                DragEnd index xy ->
+                DragEnd _ _ ->
                     getLivePyramid model
 
                 _ ->
@@ -58,10 +64,10 @@ updateHelper msg ({ pyramid, drag, currentIndex } as model) =
 
         newDrag =
             case msg of
-                DragStart index xy ->
+                DragStart _ xy ->
                     Just (Drag xy xy)
 
-                DragAt index xy ->
+                DragAt _ xy ->
                     Maybe.map (\{ start } -> Drag start xy) drag
 
                 DragEnd _ _ ->
@@ -70,7 +76,7 @@ updateHelper msg ({ pyramid, drag, currentIndex } as model) =
                 _ ->
                     Nothing
 
-        newCurrentIndex =
+        newDraggedPointIndex =
             case msg of
                 DragStart index _ ->
                     Just index
@@ -81,12 +87,12 @@ updateHelper msg ({ pyramid, drag, currentIndex } as model) =
                 _ ->
                     Nothing
     in
-        { model | pyramid = newPyramid, drag = newDrag, currentIndex = newCurrentIndex }
+        { model | pyramid = newPyramid, drag = newDrag, draggedPointIndex = newDraggedPointIndex }
 
 
 getLivePyramid : Model -> Pyramid
-getLivePyramid { pyramid, drag, currentIndex } =
-    case ( drag, currentIndex ) of
+getLivePyramid { pyramid, drag, draggedPointIndex } =
+    case ( drag, draggedPointIndex ) of
         ( Just { start, current }, Just index ) ->
             let
                 currentPoint =
@@ -111,3 +117,8 @@ getLivePyramid { pyramid, drag, currentIndex } =
 
         _ ->
             pyramid
+
+
+coordAccum : Point -> Int -> Int
+coordAccum { x, y } acc =
+    acc + truncate x + truncate y

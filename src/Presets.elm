@@ -1,25 +1,21 @@
 module Presets exposing (..)
 
 import Types exposing (..)
-import Array exposing (Array)
-
-
-whatever : Array Point
-whatever =
-    Array.fromList
-        [ Point 50 50
-        , Point 100 300
-        , Point 300 400
-        , Point 500 150
-        , Point 250 5
-        , Point 140 50
-        ]
+import Array
 
 
 whateverPyramid : Pyramid
 whateverPyramid =
     Pyramid
-        whatever
+        (Array.fromList
+            [ Point 50 50
+            , Point 100 300
+            , Point 300 400
+            , Point 500 150
+            , Point 250 5
+            , Point 140 50
+            ]
+        )
         (Point 320 200)
         20
 

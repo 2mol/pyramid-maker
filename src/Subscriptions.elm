@@ -1,12 +1,12 @@
 module Subscriptions exposing (subscriptions)
 
 import Types exposing (..)
-import Mouse exposing (Position)
+import Mouse
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    case ( model.drag, model.currentIndex ) of
+    case ( model.drag, model.draggedPointIndex ) of
         ( Just _, Just index ) ->
             Sub.batch
                 [ Mouse.moves (DragAt index)

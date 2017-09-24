@@ -26,7 +26,7 @@ import Svg exposing (Svg)
 import Svg.Attributes as SvgA
 import Mouse
 import Json.Decode as Decode
-import Array exposing (Array)
+import Array
 import Types exposing (..)
 import Config exposing (..)
 import Perspective exposing (ViewPoint(..))
@@ -54,7 +54,7 @@ canvas =
 
 
 drawPyramid : Pyramid -> ViewPoint -> Svg Msg
-drawPyramid ({ basePolygon, tip, height } as pyramid) vp =
+drawPyramid pyramid vp =
     case vp of
         Top ->
             let

@@ -5,7 +5,7 @@ module InputFields
         , randomButton
         )
 
-import Array exposing (Array)
+import Array
 import Html exposing (Html)
 import Html.Attributes as HtmlA
 import Html.Events exposing (onInput, onClick)
@@ -17,12 +17,12 @@ import Config exposing (canvasSize)
 
 
 pointsToInputs : Pyramid -> List (Html Msg)
-pointsToInputs { basePolygon, tip, height } =
+pointsToInputs { basePolygon, tip } =
     let
         polygonInputs =
             Array.toList <| Array.indexedMap mkInputPair basePolygon
     in
-        (mkInputPair -1 tip) :: polygonInputs
+        mkInputPair -1 tip :: polygonInputs
 
 
 mkInputPair : Int -> Point -> Html Msg

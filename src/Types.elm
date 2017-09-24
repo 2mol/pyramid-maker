@@ -1,6 +1,6 @@
 module Types exposing (..)
 
-import Array exposing (Array)
+import Array as A
 import Mouse exposing (Position)
 
 
@@ -13,7 +13,7 @@ unambiguous triangular sides.
 -}
 type alias Model =
     { pyramid : Pyramid
-    , currentIndex : Maybe Int
+    , draggedPointIndex : Maybe Int
     , drag : Maybe Drag
     }
 
@@ -44,7 +44,7 @@ type alias Drag =
 
 
 type alias Pyramid =
-    { basePolygon : Array Point
+    { basePolygon : A.Array Point
     , tip : Point
     , height : Float
     }
