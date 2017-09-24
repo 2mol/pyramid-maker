@@ -32,7 +32,7 @@ view ({ pyramid, drag } as model) =
             I.pointsToInputs livePyramid
 
         inputs =
-            I.randomButton :: I.addRemoveButtons :: (Html.br [] []) :: coordinateFields
+            I.randomButton :: I.addRemoveButtons :: Html.br [] [] :: coordinateFields
 
         inputColumn =
             D.wrapInputColumn inputs "Pyramid Maker"

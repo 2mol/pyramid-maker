@@ -49,6 +49,10 @@ perimeterScanner nextPoint { end } =
     Edge end nextPoint
 
 
+
+-- sorting polygon points around a central point:
+
+
 compareAngle : Point2D -> Point2D -> Point2D -> Order
 compareAngle p p1 p2 =
     compare (edgeAngle p p1) (edgeAngle p p2)
@@ -76,7 +80,50 @@ edgeAngle p1 p2 =
 
 
 
--- add a point to an array in a hopefully clever way in the future:
+-- 3D math
+
+
+pyramidToTriangles : Pyramid -> List Triangle
+pyramidToTriangles { basePolygon, tip, height } =
+    let
+        orderedPolygon =
+            basePolygon
+                |> Array.toList
+                |> List.sortWith (compareAngle tip)
+
+        polygonPoints =
+            List.map (\p -> Point3D p.x p.y 0) orderedPolygon
+
+        tip3D =
+            Point3D tip.x tip.y height
+    in
+        case polygonPoints of
+            p1 :: p2 :: ps ->
+                List.scanl (triangleScanner tip3D) (Triangle tip3D p1 p2) (ps ++ [ p1 ])
+
+            _ ->
+                []
+
+
+triangleScanner : Point3D -> Point3D -> Triangle -> Triangle
+triangleScanner anchorPoint nextPoint prevTriangle =
+    Triangle anchorPoint prevTriangle.c nextPoint
+
+
+
+-- pointTo3D : Point2D -> Point3D
+-- pointTo3D p =
+--     Point3D p.x p.y 0
+-- pyramidTo3D : Pyramid -> List Point3D
+-- pyramidTo3D { basePolygon, tip, height } =
+--     let
+--         polygonPoints =
+--             Array.toList <| Array.map pointTo3D basePolygon
+--         tip3D =
+--             Point3D tip.x tip.y height
+--     in
+--         tip3D :: polygonPoints
+-- pseudo-random point generation:
 
 
 randomPairGenerator : Random.Generator ( Int, Int )

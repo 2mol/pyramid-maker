@@ -57,6 +57,13 @@ type alias Edge =
     }
 
 
+type alias Triangle =
+    { a : Point3D
+    , b : Point3D
+    , c : Point3D
+    }
+
+
 type alias Point2D =
     { x : Float
     , y : Float

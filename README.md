@@ -24,8 +24,8 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 
 ### math
 
-- [ ] new Point3D type, conversion function for pyramid base-polygon + tip into 3D. Rename `Point` to `Point2D`.
-- [ ] list of faces/triangles, make sure orientation is consistent.
+- [x] new Point3D type, conversion function for pyramid base-polygon + tip into 3D. Rename `Point` to `Point2D`.
+- [x] list of faces/triangles, make sure orientation is consistent.
 - [ ] calculate angles.
 - [x] generate random shapes.
 - [ ] create tests to check the math.
@@ -42,6 +42,7 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 ### stretch goals
 
 - [ ] create front- and sideviews.
+- [ ] CSS instead of styling in code
 - [ ] button to round angles and dimensions to nearest degree or cm.
 - [ ] possibility to specify the _length_ of certain edges (-> solve for point coordinates).
 - [ ] visualization with material thickness.
