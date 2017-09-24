@@ -31,6 +31,14 @@ updateHelper msg ({ pyramid, drag } as model) =
                 _ ->
                     tip
 
+        newHeight =
+            case msg of
+                Change (ChangeHeight h) ->
+                    h
+
+                _ ->
+                    pyramid.height
+
         newBasePolygon =
             case msg of
                 NewPoint ->
@@ -61,7 +69,7 @@ updateHelper msg ({ pyramid, drag } as model) =
                     getLivePyramid model
 
                 _ ->
-                    { pyramid | basePolygon = newBasePolygon, tip = newTip }
+                    { pyramid | basePolygon = newBasePolygon, tip = newTip, height = newHeight }
 
         newDrag =
             case msg of
@@ -88,7 +96,11 @@ updateHelper msg ({ pyramid, drag } as model) =
                 _ ->
                     Nothing
     in
-        { model | pyramid = newPyramid, drag = newDrag, draggedPointIndex = newDraggedPointIndex }
+        { model
+            | pyramid = newPyramid
+            , drag = newDrag
+            , draggedPointIndex = newDraggedPointIndex
+        }
 
 
 getLivePyramid : Model -> Pyramid
@@ -102,12 +114,12 @@ getLivePyramid { pyramid, drag, draggedPointIndex } =
                 draggedPoint =
                     case currentPoint of
                         Just point ->
-                            Point
+                            Point2D
                                 (point.x + (toFloat <| current.x - start.x))
                                 (point.y + (toFloat <| current.y - start.y))
 
                         Nothing ->
-                            Point
+                            Point2D
                                 (pyramid.tip.x + (toFloat <| current.x - start.x))
                                 (pyramid.tip.y + (toFloat <| current.y - start.y))
             in
@@ -120,6 +132,6 @@ getLivePyramid { pyramid, drag, draggedPointIndex } =
             pyramid
 
 
-coordAccum : Point -> Int -> Int
+coordAccum : Point2D -> Int -> Int
 coordAccum { x, y } acc =
     acc + truncate x + truncate y

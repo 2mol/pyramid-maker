@@ -29,8 +29,9 @@ type Msg
 
 
 type ChangePyramidPoint
-    = ChangePolygonPoint Int Point
-    | ChangeTip Point
+    = ChangePolygonPoint Int Point2D
+    | ChangeTip Point2D
+    | ChangeHeight Float
 
 
 type alias Drag =
@@ -44,21 +45,28 @@ type alias Drag =
 
 
 type alias Pyramid =
-    { basePolygon : A.Array Point
-    , tip : Point
+    { basePolygon : A.Array Point2D
+    , tip : Point2D
     , height : Float
     }
 
 
 type alias Edge =
-    { start : Point
-    , end : Point
+    { start : Point2D
+    , end : Point2D
     }
 
 
-type alias Point =
+type alias Point2D =
     { x : Float
     , y : Float
+    }
+
+
+type alias Point3D =
+    { x : Float
+    , y : Float
+    , z : Float
     }
 
 

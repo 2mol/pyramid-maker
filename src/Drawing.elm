@@ -98,7 +98,7 @@ drawEdge { start, end } =
         Svg.line (svgLineCoord ++ lineParameters) []
 
 
-drawPoint : String -> Int -> Point -> Svg Msg
+drawPoint : String -> Int -> Point2D -> Svg Msg
 drawPoint color index { x, y } =
     Svg.circle
         [ HtmlE.on "mousedown" (Decode.map (DragStart index) Mouse.position)
@@ -196,7 +196,7 @@ edgeAnnotation label edge =
             [ Svg.text label ]
 
 
-lineMiddle : Edge -> Point
+lineMiddle : Edge -> Point2D
 lineMiddle { start, end } =
     { x = (start.x + end.x) / 2
     , y = (start.y + end.y) / 2

@@ -30,7 +30,7 @@ pyramidToEdges { basePolygon, tip } =
         ridges ++ perimeter
 
 
-polygonToEdges : Point -> List Point -> List Edge
+polygonToEdges : Point2D -> List Point2D -> List Edge
 polygonToEdges tip polygon =
     let
         orderedPolygon =
@@ -44,17 +44,17 @@ polygonToEdges tip polygon =
                 []
 
 
-perimeterScanner : Point -> Edge -> Edge
+perimeterScanner : Point2D -> Edge -> Edge
 perimeterScanner nextPoint { end } =
     Edge end nextPoint
 
 
-compareAngle : Point -> Point -> Point -> Order
+compareAngle : Point2D -> Point2D -> Point2D -> Order
 compareAngle p p1 p2 =
     compare (edgeAngle p p1) (edgeAngle p p2)
 
 
-edgeAngle : Point -> Point -> Float
+edgeAngle : Point2D -> Point2D -> Float
 edgeAngle p1 p2 =
     let
         x =
@@ -88,10 +88,10 @@ randomPairGenerator =
         Random.pair (Random.int 0 (truncate cs.x)) (Random.int 0 (truncate cs.y))
 
 
-randomPoint : Int -> Point
+randomPoint : Int -> Point2D
 randomPoint seed =
     let
         ( ( x, y ), _ ) =
             Random.step randomPairGenerator (Random.initialSeed seed)
     in
-        Point (toFloat x) (toFloat y)
+        Point2D (toFloat x) (toFloat y)

@@ -17,15 +17,21 @@ import Config exposing (canvasSize)
 
 
 pointsToInputs : Pyramid -> List (Html Msg)
-pointsToInputs { basePolygon, tip } =
+pointsToInputs { basePolygon, tip, height } =
     let
         polygonInputs =
             Array.toList <| Array.indexedMap mkInputPair basePolygon
+
+        tipInputs =
+            mkInputPair -1 tip
+
+        heightInput =
+            heightField height
     in
-        mkInputPair -1 tip :: polygonInputs
+        heightInput :: tipInputs :: polygonInputs
 
 
-mkInputPair : Int -> Point -> Html Msg
+mkInputPair : Int -> Point2D -> Html Msg
 mkInputPair index point =
     Html.div []
         [ inputField X index point
@@ -34,7 +40,7 @@ mkInputPair index point =
         ]
 
 
-inputField : Axis -> Int -> Point -> Html Msg
+inputField : Axis -> Int -> Point2D -> Html Msg
 inputField axis index point =
     let
         ( value, maxValue, onInputEvent ) =
@@ -50,6 +56,7 @@ inputField axis index point =
             , HtmlA.step "any"
             , HtmlA.style
                 [ ( "width", "80px" )
+                , ( "border", "thin solid #dddddd" )
                 ]
 
             -- , HtmlA.placeholder <| toString i
@@ -63,7 +70,27 @@ inputField axis index point =
             []
 
 
-changePoint : String -> String -> Point -> Int -> Msg
+heightField : Float -> Html Msg
+heightField height =
+    let
+        onInputEvent =
+            onInput (\s -> changeHeight s height)
+    in
+        Html.input
+            [ HtmlA.type_ "number"
+            , HtmlA.step "any"
+            , HtmlA.style
+                [ ( "width", "80px" )
+                , ( "border", "thin solid #ffaaaa" )
+                ]
+            , HtmlA.min "0"
+            , HtmlA.defaultValue <| toString <| height
+            , onInputEvent
+            ]
+            []
+
+
+changePoint : String -> String -> Point2D -> Int -> Msg
 changePoint xString yString oldPoint index =
     let
         newx =
@@ -86,6 +113,20 @@ changePoint xString yString oldPoint index =
             Change (ChangePolygonPoint index { oldPoint | x = newx, y = newy })
         else
             Change (ChangeTip { oldPoint | x = newx, y = newy })
+
+
+changeHeight : String -> Float -> Msg
+changeHeight hString oldHeight =
+    let
+        newh =
+            case String.toFloat hString of
+                Ok h ->
+                    h
+
+                _ ->
+                    oldHeight
+    in
+        Change <| ChangeHeight newh
 
 
 
