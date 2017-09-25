@@ -91,38 +91,32 @@ pyramidToTriangles { basePolygon, tip, height } =
                 |> Array.toList
                 |> List.sortWith (compareAngle tip)
 
-        polygonPoints =
+        ordered3DPolygon =
             List.map (\p -> Point3D p.x p.y 0) orderedPolygon
 
         tip3D =
             Point3D tip.x tip.y height
     in
-        case polygonPoints of
+        case ordered3DPolygon of
             p1 :: p2 :: ps ->
-                List.scanl (triangleScanner tip3D) (Triangle tip3D p1 p2) (ps ++ [ p1 ])
+                -- these triangles _will_ all be counter-clockwise due to the sorting
+                List.scanl triangleScanner (Triangle tip3D p1 p2) (ps ++ [ p1 ])
 
             _ ->
                 []
 
 
-triangleScanner : Point3D -> Point3D -> Triangle -> Triangle
-triangleScanner anchorPoint nextPoint prevTriangle =
-    Triangle anchorPoint prevTriangle.c nextPoint
+triangleScanner : Point3D -> Triangle -> Triangle
+triangleScanner nextPoint prevTriangle =
+    Triangle prevTriangle.a prevTriangle.c nextPoint
+
+
+normalVector : Triangle -> Point3D
+normalVector _ =
+    Point3D 0 0 0
 
 
 
--- pointTo3D : Point2D -> Point3D
--- pointTo3D p =
---     Point3D p.x p.y 0
--- pyramidTo3D : Pyramid -> List Point3D
--- pyramidTo3D { basePolygon, tip, height } =
---     let
---         polygonPoints =
---             Array.toList <| Array.map pointTo3D basePolygon
---         tip3D =
---             Point3D tip.x tip.y height
---     in
---         tip3D :: polygonPoints
 -- pseudo-random point generation:
 
 

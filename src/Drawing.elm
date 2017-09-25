@@ -69,7 +69,7 @@ drawPyramid pyramid vp =
                     Svg.g [] <| drawPyramidPoints pyramid
 
                 edgeLabels =
-                    List.map toString <| List.range 1 <| List.length edges
+                    List.map toString <| List.range 1 (List.length edges)
 
                 drawnLabels =
                     Svg.g [] <| List.map2 edgeAnnotation edgeLabels edges
