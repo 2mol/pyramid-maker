@@ -8,4 +8,4 @@ canvasSize =
 
 grey : String
 grey =
-    "#f5f5f5f5"
+    "#f7f7f7"
