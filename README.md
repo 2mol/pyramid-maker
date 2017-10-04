@@ -15,10 +15,10 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 - [ ] presets for some basic shapes that work well.
 - [x] mouse interactions, dragging of corners.
 - [ ] annotatations for angles and lengths. On/off toggle button.
-- [ ] make annotations non-active svg text
+- [ ] change annotations text to non-active svg text.
 - [ ] cut list, calculate m<sup>2</sup> of material required.
 - [ ] units!
-- [ ] buttons to scale up or down.
+- [ ] buttons to scale up or down. Button to scale to fill canvas.
 - [ ] fields for each edge, ability to directly set length of an edge.
 - [ ] build instructions in README.
 - [ ] hole placement for T-Nuts.
