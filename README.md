@@ -14,7 +14,7 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 - [x] add input boxes for coordinates.
 - [ ] presets for some basic shapes that work well.
 - [x] mouse interactions, dragging of corners.
-- [ ] annotatations for angles and lengths. On/off toggle button.
+- [x] annotatations for angles and lengths.
 - [ ] change annotations text to non-active svg text.
 - [ ] cut list, calculate m<sup>2</sup> of material required.
 - [ ] units!
@@ -27,9 +27,9 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 
 - [x] new Point3D type, conversion function for pyramid base-polygon + tip into 3D. Rename `Point` to `Point2D`.
 - [x] list of faces/triangles, make sure orientation is consistent.
-- [ ] calculate angles.
+- [x] calculate angles.
 - [x] generate random shapes.
-- [ ] create tests to check the math.
+- [ ] tests to check the math.
 
 ### code quality
 

@@ -35,3 +35,17 @@ easyPeasy =
         )
         (Point2D 120 200)
         666
+
+
+testAnglePyramid : Pyramid
+testAnglePyramid =
+    Pyramid
+        (Array.fromList
+            [ Point2D 0 0
+            , Point2D 400 400
+            , Point2D 400 0
+            , Point2D 0 400
+            ]
+        )
+        (Point2D 200 200)
+        0

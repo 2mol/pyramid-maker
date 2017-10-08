@@ -30,7 +30,8 @@ import Array
 import Types exposing (..)
 import Config exposing (..)
 import Perspective exposing (ViewPoint(..))
-import Math exposing (..)
+import Math as Math
+import Round as Round
 
 
 canvas : List (Html.Attribute Msg)
@@ -59,7 +60,7 @@ drawPyramid pyramid vp =
         Top ->
             let
                 edges =
-                    pyramidToEdges pyramid
+                    Math.pyramidToEdges pyramid
 
                 drawnEdges =
                     Svg.g [] <| List.map drawEdge edges
@@ -69,8 +70,9 @@ drawPyramid pyramid vp =
                     Svg.g [] <| drawPyramidPoints pyramid
 
                 edgeLabels =
-                    List.map toString <| List.range 1 (List.length edges)
+                    List.map radiansToDegreeString <| Math.pyramidAngles pyramid
 
+                --List.map toString <| List.range 1 (List.length edges)
                 drawnLabels =
                     Svg.g [] <| List.map2 edgeAnnotation edgeLabels edges
             in
@@ -201,3 +203,15 @@ lineMiddle { start, end } =
     { x = (start.x + end.x) / 2
     , y = (start.y + end.y) / 2
     }
+
+
+radiansToDegreeString : Float -> String
+radiansToDegreeString angle =
+    let
+        degree =
+            180 * angle / pi
+
+        roundedDegree =
+            Round.round 1 degree
+    in
+        roundedDegree ++ "°"

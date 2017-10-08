@@ -2,6 +2,7 @@ module Math
     exposing
         ( pyramidToEdges
         , randomPoint
+        , pyramidAngles
         )
 
 import Types exposing (..)
@@ -16,15 +17,17 @@ import Config as C
 pyramidToEdges : Pyramid -> List Edge
 pyramidToEdges { basePolygon, tip } =
     let
-        ridges =
+        orderedPolygon =
             basePolygon
                 |> Array.toList
+                |> List.sortWith (compareAngle tip)
+
+        ridges =
+            orderedPolygon
                 |> List.map (Edge tip)
 
-        -- Array.toList <| Array.map (Edge tip) basePolygon
         perimeter =
-            basePolygon
-                |> Array.toList
+            orderedPolygon
                 |> polygonToEdges tip
     in
         ridges ++ perimeter
@@ -32,16 +35,12 @@ pyramidToEdges { basePolygon, tip } =
 
 polygonToEdges : Point2D -> List Point2D -> List Edge
 polygonToEdges tip polygon =
-    let
-        orderedPolygon =
-            polygon |> List.sortWith (compareAngle tip)
-    in
-        case orderedPolygon of
-            x1 :: x2 :: xs ->
-                List.scanl perimeterScanner (Edge x1 x2) (xs ++ [ x1 ])
+    case polygon of
+        x1 :: x2 :: xs ->
+            List.scanl perimeterScanner (Edge x1 x2) (xs ++ [ x1 ])
 
-            _ ->
-                []
+        _ ->
+            []
 
 
 perimeterScanner : Point2D -> Edge -> Edge
@@ -83,6 +82,31 @@ edgeAngle p1 p2 =
 -- 3D math
 
 
+pyramidAngles : Pyramid -> List Float
+pyramidAngles p =
+    p |> pyramidToTriangles |> anglesBetweenTriangles
+
+
+anglesBetweenTriangles : List Triangle -> List Float
+anglesBetweenTriangles triangles =
+    case triangles of
+        t1 :: _ :: _ ->
+            anglesBetweenTrianglesHelper (triangles ++ [ t1 ])
+
+        _ ->
+            []
+
+
+anglesBetweenTrianglesHelper : List Triangle -> List Float
+anglesBetweenTrianglesHelper triangles =
+    case triangles of
+        t1 :: t2 :: ts ->
+            triangleAngle t1 t2 :: anglesBetweenTrianglesHelper (t2 :: ts)
+
+        _ ->
+            []
+
+
 pyramidToTriangles : Pyramid -> List Triangle
 pyramidToTriangles { basePolygon, tip, height } =
     let
@@ -112,8 +136,51 @@ triangleScanner nextPoint prevTriangle =
 
 
 normalVector : Triangle -> Point3D
-normalVector _ =
-    Point3D 0 0 0
+normalVector { a, b, c } =
+    let
+        u =
+            Point3D (b.x - a.x) (b.y - a.y) (b.z - a.z)
+
+        v =
+            Point3D (c.x - a.x) (c.y - a.y) (c.z - a.z)
+
+        cpx =
+            (u.y * v.z - u.z * v.y)
+
+        cpy =
+            (u.z * v.x - u.x * v.z)
+
+        cpz =
+            (u.x * v.y - u.y * v.x)
+    in
+        Point3D cpx cpy cpz
+
+
+vectorAngle : Point3D -> Point3D -> Float
+vectorAngle u v =
+    let
+        dotProduct =
+            u.x * v.x + u.y * v.y + u.z * v.z
+
+        nu =
+            sqrt <| u.x ^ 2 + u.y ^ 2 + u.z ^ 2
+
+        nv =
+            sqrt <| v.x ^ 2 + v.y ^ 2 + v.z ^ 2
+    in
+        acos <| dotProduct / (nu * nv)
+
+
+triangleAngle : Triangle -> Triangle -> Float
+triangleAngle t1 t2 =
+    let
+        n1 =
+            normalVector t1
+
+        n2 =
+            normalVector t2
+    in
+        (vectorAngle n1 n2) / 2
 
 
 
