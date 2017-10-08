@@ -83,25 +83,35 @@ edgeAngle p1 p2 =
 
 
 pyramidAngles : Pyramid -> List Float
-pyramidAngles p =
-    p |> pyramidToTriangles |> anglesBetweenTriangles
+pyramidAngles pyramid =
+    let
+        triangles =
+            pyramidToTriangles pyramid
+
+        faceAngles =
+            anglesBetweenFaces triangles
+
+        wallAngles =
+            List.map wallAngle triangles
+    in
+        faceAngles ++ wallAngles
 
 
-anglesBetweenTriangles : List Triangle -> List Float
-anglesBetweenTriangles triangles =
+anglesBetweenFaces : List Triangle -> List Float
+anglesBetweenFaces triangles =
     case triangles of
         t1 :: _ :: _ ->
-            anglesBetweenTrianglesHelper (triangles ++ [ t1 ])
+            anglesBetweenFacesHelper (triangles ++ [ t1 ])
 
         _ ->
             []
 
 
-anglesBetweenTrianglesHelper : List Triangle -> List Float
-anglesBetweenTrianglesHelper triangles =
+anglesBetweenFacesHelper : List Triangle -> List Float
+anglesBetweenFacesHelper triangles =
     case triangles of
         t1 :: t2 :: ts ->
-            triangleAngle t1 t2 :: anglesBetweenTrianglesHelper (t2 :: ts)
+            (triangleAngle t1 t2) / 2 :: anglesBetweenFacesHelper (t2 :: ts)
 
         _ ->
             []
@@ -180,7 +190,19 @@ triangleAngle t1 t2 =
         n2 =
             normalVector t2
     in
-        (vectorAngle n1 n2) / 2
+        vectorAngle n1 n2
+
+
+wallAngle : Triangle -> Float
+wallAngle t =
+    let
+        n1 =
+            normalVector t
+
+        n2 =
+            Point3D 0 0 1
+    in
+        vectorAngle n1 n2
 
 
 

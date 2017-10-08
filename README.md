@@ -29,6 +29,7 @@ Inspired by the [following video](https://www.youtube.com/watch?v=Lp2mkK2qPTc), 
 - [x] list of faces/triangles, make sure orientation is consistent.
 - [x] calculate angles.
 - [x] generate random shapes.
+- [ ] get negative angles working
 - [ ] tests to check the math.
 
 ### code quality
