@@ -9726,6 +9726,214 @@ var _elm_lang$svg$Svg_Attributes$additive = _elm_lang$virtual_dom$VirtualDom$att
 var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$attribute('accumulate');
 var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
 var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
+var _myrho$elm_round$Round$funNum = F3(
+	function (fun, s, fl) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			1 / 0,
+			_elm_lang$core$Result$toMaybe(
+				_elm_lang$core$String$toFloat(
+					A2(fun, s, fl))));
+	});
+var _myrho$elm_round$Round$splitComma = function (str) {
+	var _p0 = A2(_elm_lang$core$String$split, '.', str);
+	if (_p0.ctor === '::') {
+		if (_p0._1.ctor === '::') {
+			return {ctor: '_Tuple2', _0: _p0._0, _1: _p0._1._0};
+		} else {
+			return {ctor: '_Tuple2', _0: _p0._0, _1: '0'};
+		}
+	} else {
+		return {ctor: '_Tuple2', _0: '0', _1: '0'};
+	}
+};
+var _myrho$elm_round$Round$toDecimal = function (fl) {
+	var _p1 = A2(
+		_elm_lang$core$String$split,
+		'e',
+		_elm_lang$core$Basics$toString(fl));
+	if (_p1.ctor === '::') {
+		if (_p1._1.ctor === '::') {
+			var _p4 = _p1._1._0;
+			var _p2 = function () {
+				var hasSign = _elm_lang$core$Native_Utils.cmp(fl, 0) < 0;
+				var _p3 = _myrho$elm_round$Round$splitComma(_p1._0);
+				var b = _p3._0;
+				var a = _p3._1;
+				return {
+					ctor: '_Tuple3',
+					_0: hasSign ? '-' : '',
+					_1: hasSign ? A2(_elm_lang$core$String$dropLeft, 1, b) : b,
+					_2: a
+				};
+			}();
+			var sign = _p2._0;
+			var before = _p2._1;
+			var after = _p2._2;
+			var e = A2(
+				_elm_lang$core$Maybe$withDefault,
+				0,
+				_elm_lang$core$Result$toMaybe(
+					_elm_lang$core$String$toInt(
+						A2(_elm_lang$core$String$startsWith, '+', _p4) ? A2(_elm_lang$core$String$dropLeft, 1, _p4) : _p4)));
+			var newBefore = (_elm_lang$core$Native_Utils.cmp(e, 0) > -1) ? before : ((_elm_lang$core$Native_Utils.cmp(
+				_elm_lang$core$Basics$abs(e),
+				_elm_lang$core$String$length(before)) < 0) ? A2(
+				_elm_lang$core$Basics_ops['++'],
+				A2(
+					_elm_lang$core$String$left,
+					_elm_lang$core$String$length(before) - _elm_lang$core$Basics$abs(e),
+					before),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'.',
+					A2(
+						_elm_lang$core$String$right,
+						_elm_lang$core$Basics$abs(e),
+						before))) : A2(
+				_elm_lang$core$Basics_ops['++'],
+				'0.',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(
+						_elm_lang$core$String$repeat,
+						_elm_lang$core$Basics$abs(e) - _elm_lang$core$String$length(before),
+						'0'),
+					before)));
+			var newAfter = (_elm_lang$core$Native_Utils.cmp(e, 0) < 1) ? after : ((_elm_lang$core$Native_Utils.cmp(
+				e,
+				_elm_lang$core$String$length(after)) < 0) ? A2(
+				_elm_lang$core$Basics_ops['++'],
+				A2(_elm_lang$core$String$left, e, after),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'.',
+					A2(
+						_elm_lang$core$String$right,
+						_elm_lang$core$String$length(after) - e,
+						after))) : A2(
+				_elm_lang$core$Basics_ops['++'],
+				after,
+				A2(
+					_elm_lang$core$String$repeat,
+					e - _elm_lang$core$String$length(after),
+					'0')));
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				sign,
+				A2(_elm_lang$core$Basics_ops['++'], newBefore, newAfter));
+		} else {
+			return _p1._0;
+		}
+	} else {
+		return '';
+	}
+};
+var _myrho$elm_round$Round$truncate = function (n) {
+	return (_elm_lang$core$Native_Utils.cmp(n, 0) < 0) ? _elm_lang$core$Basics$ceiling(n) : _elm_lang$core$Basics$floor(n);
+};
+var _myrho$elm_round$Round$roundFun = F3(
+	function (functor, s, fl) {
+		if (_elm_lang$core$Native_Utils.eq(s, 0)) {
+			return _elm_lang$core$Basics$toString(
+				functor(fl));
+		} else {
+			if (_elm_lang$core$Native_Utils.cmp(s, 0) < 0) {
+				return function (r) {
+					return (!_elm_lang$core$Native_Utils.eq(r, '0')) ? A2(
+						_elm_lang$core$Basics_ops['++'],
+						r,
+						A2(
+							_elm_lang$core$String$repeat,
+							_elm_lang$core$Basics$abs(s),
+							'0')) : r;
+				}(
+					A3(
+						_myrho$elm_round$Round$roundFun,
+						functor,
+						0,
+						A2(
+							F2(
+								function (x, y) {
+									return x / y;
+								}),
+							fl,
+							A2(
+								F2(
+									function (x, y) {
+										return Math.pow(x, y);
+									}),
+								10,
+								_elm_lang$core$Basics$abs(
+									_elm_lang$core$Basics$toFloat(s))))));
+			} else {
+				var dd = (_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) ? 2 : 1;
+				var n = (_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) ? -1 : 1;
+				var e = Math.pow(10, s);
+				var _p5 = _myrho$elm_round$Round$splitComma(
+					_myrho$elm_round$Round$toDecimal(fl));
+				var before = _p5._0;
+				var after = _p5._1;
+				var a = A3(
+					_elm_lang$core$String$padRight,
+					s + 1,
+					_elm_lang$core$Native_Utils.chr('0'),
+					after);
+				var b = A2(_elm_lang$core$String$left, s, a);
+				var c = A2(_elm_lang$core$String$dropLeft, s, a);
+				var f = functor(
+					A2(
+						_elm_lang$core$Maybe$withDefault,
+						_elm_lang$core$Basics$toFloat(e),
+						_elm_lang$core$Result$toMaybe(
+							_elm_lang$core$String$toFloat(
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									(_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) ? '-' : '',
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										'1',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											b,
+											A2(_elm_lang$core$Basics_ops['++'], '.', c))))))));
+				var g = A2(
+					_elm_lang$core$String$dropLeft,
+					dd,
+					_elm_lang$core$Basics$toString(f));
+				var h = _myrho$elm_round$Round$truncate(fl) + (_elm_lang$core$Native_Utils.eq(f - (e * n), e * n) ? ((_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) ? -1 : 1) : 0);
+				var j = _elm_lang$core$Basics$toString(h);
+				var i = (_elm_lang$core$Native_Utils.eq(j, '0') && ((!_elm_lang$core$Native_Utils.eq(f - (e * n), 0)) && ((_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) && (_elm_lang$core$Native_Utils.cmp(fl, -1) > 0)))) ? A2(_elm_lang$core$Basics_ops['++'], '-', j) : j;
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					i,
+					A2(_elm_lang$core$Basics_ops['++'], '.', g));
+			}
+		}
+	});
+var _myrho$elm_round$Round$round = _myrho$elm_round$Round$roundFun(_elm_lang$core$Basics$round);
+var _myrho$elm_round$Round$roundNum = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$round);
+var _myrho$elm_round$Round$ceiling = _myrho$elm_round$Round$roundFun(_elm_lang$core$Basics$ceiling);
+var _myrho$elm_round$Round$ceilingNum = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$ceiling);
+var _myrho$elm_round$Round$floor = _myrho$elm_round$Round$roundFun(_elm_lang$core$Basics$floor);
+var _myrho$elm_round$Round$floorCom = F2(
+	function (s, fl) {
+		return (_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) ? A2(_myrho$elm_round$Round$ceiling, s, fl) : A2(_myrho$elm_round$Round$floor, s, fl);
+	});
+var _myrho$elm_round$Round$floorNumCom = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$floorCom);
+var _myrho$elm_round$Round$ceilingCom = F2(
+	function (s, fl) {
+		return (_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) ? A2(_myrho$elm_round$Round$floor, s, fl) : A2(_myrho$elm_round$Round$ceiling, s, fl);
+	});
+var _myrho$elm_round$Round$ceilingNumCom = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$ceilingCom);
+var _myrho$elm_round$Round$floorNum = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$floor);
+var _myrho$elm_round$Round$roundCom = _myrho$elm_round$Round$roundFun(
+	function (fl) {
+		var dec = fl - _elm_lang$core$Basics$toFloat(
+			_myrho$elm_round$Round$truncate(fl));
+		return (_elm_lang$core$Native_Utils.cmp(dec, 0.5) > -1) ? _elm_lang$core$Basics$ceiling(fl) : ((_elm_lang$core$Native_Utils.cmp(dec, -0.5) < 1) ? _elm_lang$core$Basics$floor(fl) : _elm_lang$core$Basics$round(fl));
+	});
+var _myrho$elm_round$Round$roundNumCom = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$roundCom);
 var _user$project$Config$grey = '#f7f7f7';
 var _user$project$Config$canvasSize = {x: 600, y: 400, pixels: '600px'};
 var _user$project$Types$Model = F3(
@@ -9812,13 +10020,72 @@ var _user$project$Math$randomPoint = function (seed) {
 		_elm_lang$core$Basics$toFloat(x),
 		_elm_lang$core$Basics$toFloat(y));
 };
+var _user$project$Math$vectorAngle = F2(
+	function (u, v) {
+		var nv = _elm_lang$core$Basics$sqrt(
+			(Math.pow(v.x, 2) + Math.pow(v.y, 2)) + Math.pow(v.z, 2));
+		var nu = _elm_lang$core$Basics$sqrt(
+			(Math.pow(u.x, 2) + Math.pow(u.y, 2)) + Math.pow(u.z, 2));
+		var dotProduct = ((u.x * v.x) + (u.y * v.y)) + (u.z * v.z);
+		return _elm_lang$core$Basics$acos(dotProduct / (nu * nv));
+	});
 var _user$project$Math$normalVector = function (_p1) {
-	return A3(_user$project$Types$Point3D, 0, 0, 0);
+	var _p2 = _p1;
+	var _p5 = _p2.c;
+	var _p4 = _p2.b;
+	var _p3 = _p2.a;
+	var v = A3(_user$project$Types$Point3D, _p5.x - _p3.x, _p5.y - _p3.y, _p5.z - _p3.z);
+	var u = A3(_user$project$Types$Point3D, _p4.x - _p3.x, _p4.y - _p3.y, _p4.z - _p3.z);
+	var cpx = (u.y * v.z) - (u.z * v.y);
+	var cpy = (u.z * v.x) - (u.x * v.z);
+	var cpz = (u.x * v.y) - (u.y * v.x);
+	return A3(_user$project$Types$Point3D, cpx, cpy, cpz);
+};
+var _user$project$Math$triangleAngle = F2(
+	function (t1, t2) {
+		var n2 = _user$project$Math$normalVector(t2);
+		var n1 = _user$project$Math$normalVector(t1);
+		return A2(_user$project$Math$vectorAngle, n1, n2);
+	});
+var _user$project$Math$wallAngle = function (t) {
+	var n2 = A3(_user$project$Types$Point3D, 0, 0, 1);
+	var n1 = _user$project$Math$normalVector(t);
+	return A2(_user$project$Math$vectorAngle, n1, n2);
 };
 var _user$project$Math$triangleScanner = F2(
 	function (nextPoint, prevTriangle) {
 		return A3(_user$project$Types$Triangle, prevTriangle.a, prevTriangle.c, nextPoint);
 	});
+var _user$project$Math$anglesBetweenFacesHelper = function (triangles) {
+	var _p6 = triangles;
+	if ((_p6.ctor === '::') && (_p6._1.ctor === '::')) {
+		var _p7 = _p6._1._0;
+		return {
+			ctor: '::',
+			_0: A2(_user$project$Math$triangleAngle, _p6._0, _p7) / 2,
+			_1: _user$project$Math$anglesBetweenFacesHelper(
+				{ctor: '::', _0: _p7, _1: _p6._1._1})
+		};
+	} else {
+		return {ctor: '[]'};
+	}
+};
+var _user$project$Math$anglesBetweenFaces = function (triangles) {
+	var _p8 = triangles;
+	if ((_p8.ctor === '::') && (_p8._1.ctor === '::')) {
+		return _user$project$Math$anglesBetweenFacesHelper(
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				triangles,
+				{
+					ctor: '::',
+					_0: _p8._0,
+					_1: {ctor: '[]'}
+				}));
+	} else {
+		return {ctor: '[]'};
+	}
+};
 var _user$project$Math$edgeAngle = F2(
 	function (p1, p2) {
 		var y = p2.y - p1.y;
@@ -9835,82 +10102,89 @@ var _user$project$Math$compareAngle = F3(
 			A2(_user$project$Math$edgeAngle, p, p1),
 			A2(_user$project$Math$edgeAngle, p, p2));
 	});
-var _user$project$Math$pyramidToTriangles = function (_p2) {
-	var _p3 = _p2;
-	var _p6 = _p3.tip;
-	var tip3D = A3(_user$project$Types$Point3D, _p6.x, _p6.y, _p3.height);
+var _user$project$Math$pyramidToTriangles = function (_p9) {
+	var _p10 = _p9;
+	var _p13 = _p10.tip;
+	var tip3D = A3(_user$project$Types$Point3D, _p13.x, _p13.y, _p10.height);
 	var orderedPolygon = A2(
 		_elm_lang$core$List$sortWith,
-		_user$project$Math$compareAngle(_p6),
-		_elm_lang$core$Array$toList(_p3.basePolygon));
+		_user$project$Math$compareAngle(_p13),
+		_elm_lang$core$Array$toList(_p10.basePolygon));
 	var ordered3DPolygon = A2(
 		_elm_lang$core$List$map,
 		function (p) {
 			return A3(_user$project$Types$Point3D, p.x, p.y, 0);
 		},
 		orderedPolygon);
-	var _p4 = ordered3DPolygon;
-	if ((_p4.ctor === '::') && (_p4._1.ctor === '::')) {
-		var _p5 = _p4._0;
+	var _p11 = ordered3DPolygon;
+	if ((_p11.ctor === '::') && (_p11._1.ctor === '::')) {
+		var _p12 = _p11._0;
 		return A3(
 			_elm_lang$core$List$scanl,
 			_user$project$Math$triangleScanner,
-			A3(_user$project$Types$Triangle, tip3D, _p5, _p4._1._0),
+			A3(_user$project$Types$Triangle, tip3D, _p12, _p11._1._0),
 			A2(
 				_elm_lang$core$Basics_ops['++'],
-				_p4._1._1,
+				_p11._1._1,
 				{
 					ctor: '::',
-					_0: _p5,
+					_0: _p12,
 					_1: {ctor: '[]'}
 				}));
 	} else {
 		return {ctor: '[]'};
 	}
 };
+var _user$project$Math$pyramidAngles = function (pyramid) {
+	var triangles = _user$project$Math$pyramidToTriangles(pyramid);
+	var faceAngles = _user$project$Math$anglesBetweenFaces(triangles);
+	var wallAngles = A2(_elm_lang$core$List$map, _user$project$Math$wallAngle, triangles);
+	return A2(_elm_lang$core$Basics_ops['++'], faceAngles, wallAngles);
+};
 var _user$project$Math$perimeterScanner = F2(
-	function (nextPoint, _p7) {
-		var _p8 = _p7;
-		return A2(_user$project$Types$Edge, _p8.end, nextPoint);
+	function (nextPoint, _p14) {
+		var _p15 = _p14;
+		return A2(_user$project$Types$Edge, _p15.end, nextPoint);
 	});
 var _user$project$Math$polygonToEdges = F2(
 	function (tip, polygon) {
-		var orderedPolygon = A2(
-			_elm_lang$core$List$sortWith,
-			_user$project$Math$compareAngle(tip),
-			polygon);
-		var _p9 = orderedPolygon;
-		if ((_p9.ctor === '::') && (_p9._1.ctor === '::')) {
-			var _p10 = _p9._0;
+		var _p16 = polygon;
+		if ((_p16.ctor === '::') && (_p16._1.ctor === '::')) {
+			var _p17 = _p16._0;
 			return A3(
 				_elm_lang$core$List$scanl,
 				_user$project$Math$perimeterScanner,
-				A2(_user$project$Types$Edge, _p10, _p9._1._0),
+				A2(_user$project$Types$Edge, _p17, _p16._1._0),
 				A2(
 					_elm_lang$core$Basics_ops['++'],
-					_p9._1._1,
+					_p16._1._1,
 					{
 						ctor: '::',
-						_0: _p10,
+						_0: _p17,
 						_1: {ctor: '[]'}
 					}));
 		} else {
 			return {ctor: '[]'};
 		}
 	});
-var _user$project$Math$pyramidToEdges = function (_p11) {
-	var _p12 = _p11;
-	var _p14 = _p12.tip;
-	var _p13 = _p12.basePolygon;
-	var perimeter = A2(
-		_user$project$Math$polygonToEdges,
-		_p14,
-		_elm_lang$core$Array$toList(_p13));
+var _user$project$Math$pyramidToEdges = function (_p18) {
+	var _p19 = _p18;
+	var _p20 = _p19.tip;
+	var orderedPolygon = A2(
+		_elm_lang$core$List$sortWith,
+		_user$project$Math$compareAngle(_p20),
+		_elm_lang$core$Array$toList(_p19.basePolygon));
 	var ridges = A2(
 		_elm_lang$core$List$map,
-		_user$project$Types$Edge(_p14),
-		_elm_lang$core$Array$toList(_p13));
+		_user$project$Types$Edge(_p20),
+		orderedPolygon);
+	var perimeter = A2(_user$project$Math$polygonToEdges, _p20, orderedPolygon);
 	return A2(_elm_lang$core$Basics_ops['++'], ridges, perimeter);
+};
+var _user$project$Drawing$radiansToDegreeString = function (angle) {
+	var degree = (180 * angle) / _elm_lang$core$Basics$pi;
+	var roundedDegree = A2(_myrho$elm_round$Round$round, 1, degree);
+	return A2(_elm_lang$core$Basics_ops['++'], roundedDegree, '°');
 };
 var _user$project$Drawing$lineMiddle = function (_p0) {
 	var _p1 = _p0;
@@ -10198,6 +10472,10 @@ var _user$project$Drawing$drawPyramidPoints = function (_p10) {
 var _user$project$Drawing$drawPyramid = F2(
 	function (pyramid, vp) {
 		var _p12 = vp;
+		var edgeLabels = A2(
+			_elm_lang$core$List$map,
+			_user$project$Drawing$radiansToDegreeString,
+			_user$project$Math$pyramidAngles(pyramid));
 		var drawnPoints = A2(
 			_elm_lang$svg$Svg$g,
 			{ctor: '[]'},
@@ -10207,13 +10485,6 @@ var _user$project$Drawing$drawPyramid = F2(
 			_elm_lang$svg$Svg$g,
 			{ctor: '[]'},
 			A2(_elm_lang$core$List$map, _user$project$Drawing$drawEdge, edges));
-		var edgeLabels = A2(
-			_elm_lang$core$List$map,
-			_elm_lang$core$Basics$toString,
-			A2(
-				_elm_lang$core$List$range,
-				1,
-				_elm_lang$core$List$length(edges)));
 		var drawnLabels = A2(
 			_elm_lang$svg$Svg$g,
 			{ctor: '[]'},
@@ -10749,6 +11020,28 @@ var _user$project$Subscriptions$subscriptions = function (model) {
 		return _elm_lang$core$Platform_Sub$none;
 	}
 };
+var _user$project$Presets$testAnglePyramid = A3(
+	_user$project$Types$Pyramid,
+	_elm_lang$core$Array$fromList(
+		{
+			ctor: '::',
+			_0: A2(_user$project$Types$Point2D, 0, 0),
+			_1: {
+				ctor: '::',
+				_0: A2(_user$project$Types$Point2D, 400, 400),
+				_1: {
+					ctor: '::',
+					_0: A2(_user$project$Types$Point2D, 400, 0),
+					_1: {
+						ctor: '::',
+						_0: A2(_user$project$Types$Point2D, 0, 400),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}),
+	A2(_user$project$Types$Point2D, 200, 200),
+	0);
 var _user$project$Presets$easyPeasy = A3(
 	_user$project$Types$Pyramid,
 	_elm_lang$core$Array$fromList(
