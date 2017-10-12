@@ -1,7 +1,17 @@
 module Presets exposing (..)
 
 import Types exposing (..)
+import Dict
 import Array
+
+
+presets : Dict.Dict String Pyramid
+presets =
+    Dict.fromList
+        [ ( "Whatever", whateverPyramid )
+        , ( "Easy Peasy", easyPeasy )
+        , ( "Test Angles", testAnglePyramid )
+        ]
 
 
 whateverPyramid : Pyramid
@@ -48,4 +58,4 @@ testAnglePyramid =
             ]
         )
         (Point2D 200 200)
-        0
+        200
