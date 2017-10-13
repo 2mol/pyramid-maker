@@ -194,6 +194,7 @@ edgeAnnotation label edge =
             , SvgA.y <| toString <| pos.y
             , SvgA.fontFamily "sans-serif"
             , SvgA.fontSize "14"
+            , SvgA.pointerEvents "none"
             ]
             [ Svg.text label ]
 
