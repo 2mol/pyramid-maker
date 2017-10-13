@@ -26,4 +26,4 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model Presets.whateverPyramid Nothing Nothing, Cmd.none )
+    ( Model Presets.whateverPyramid Nothing, Cmd.none )

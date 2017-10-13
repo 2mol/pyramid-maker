@@ -13,31 +13,31 @@ unambiguous triangular sides.
 -}
 type alias Model =
     { pyramid : Pyramid
-    , draggedPointIndex : Maybe Int
-    , drag : Maybe Drag
+    , drag : Maybe DragPoint
     }
+
+
+type alias DragPoint =
+    { start : Position
+    , current : Position
+    , index : Int
+    }
+
+
+
+-- Message Type:
 
 
 type Msg
     = NewPoint
     | RemovePoint
-    | Change ChangePyramidPoint
     | Random
+    | ChangePolygonPoint Int Point2D
+    | ChangeTip Point2D
+    | ChangeHeight Float
     | DragStart Int Position
     | DragAt Int Position
     | DragEnd Int Position
-
-
-type ChangePyramidPoint
-    = ChangePolygonPoint Int Point2D
-    | ChangeTip Point2D
-    | ChangeHeight Float
-
-
-type alias Drag =
-    { start : Position
-    , current : Position
-    }
 
 
 

@@ -25,7 +25,7 @@ updateHelper msg ({ pyramid, drag } as model) =
 
         newTip =
             case msg of
-                Change (ChangeTip updatedPoint) ->
+                ChangeTip updatedPoint ->
                     updatedPoint
 
                 _ ->
@@ -33,7 +33,7 @@ updateHelper msg ({ pyramid, drag } as model) =
 
         newHeight =
             case msg of
-                Change (ChangeHeight h) ->
+                ChangeHeight h ->
                     h
 
                 _ ->
@@ -53,7 +53,7 @@ updateHelper msg ({ pyramid, drag } as model) =
                     else
                         basePolygon
 
-                Change (ChangePolygonPoint index updatedPoint) ->
+                ChangePolygonPoint index updatedPoint ->
                     Array.set index updatedPoint basePolygon
 
                 Random ->
@@ -73,25 +73,14 @@ updateHelper msg ({ pyramid, drag } as model) =
 
         newDrag =
             case msg of
-                DragStart _ xy ->
-                    Just (Drag xy xy)
+                DragStart index xy ->
+                    Just (DragPoint xy xy index)
 
-                DragAt _ xy ->
-                    Maybe.map (\{ start } -> Drag start xy) drag
+                DragAt index xy ->
+                    Maybe.map (\{ start } -> DragPoint start xy index) drag
 
                 DragEnd _ _ ->
                     Nothing
-
-                _ ->
-                    Nothing
-
-        newDraggedPointIndex =
-            case msg of
-                DragStart index _ ->
-                    Just index
-
-                DragAt index _ ->
-                    Just index
 
                 _ ->
                     Nothing
@@ -99,14 +88,13 @@ updateHelper msg ({ pyramid, drag } as model) =
         { model
             | pyramid = newPyramid
             , drag = newDrag
-            , draggedPointIndex = newDraggedPointIndex
         }
 
 
 getLivePyramid : Model -> Pyramid
-getLivePyramid { pyramid, drag, draggedPointIndex } =
-    case ( drag, draggedPointIndex ) of
-        ( Just { start, current }, Just index ) ->
+getLivePyramid { pyramid, drag } =
+    case drag of
+        Just { start, current, index } ->
             let
                 currentPoint =
                     Array.get index pyramid.basePolygon

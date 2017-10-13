@@ -110,9 +110,9 @@ changePoint xString yString oldPoint index =
                     oldPoint.y
     in
         if index >= 0 then
-            Change (ChangePolygonPoint index { oldPoint | x = newx, y = newy })
+            ChangePolygonPoint index { oldPoint | x = newx, y = newy }
         else
-            Change (ChangeTip { oldPoint | x = newx, y = newy })
+            ChangeTip { oldPoint | x = newx, y = newy }
 
 
 changeHeight : String -> Float -> Msg
@@ -126,7 +126,7 @@ changeHeight hString oldHeight =
                 _ ->
                     oldHeight
     in
-        Change <| ChangeHeight newh
+        ChangeHeight newh
 
 
 
